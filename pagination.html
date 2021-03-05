@@ -1,0 +1,176 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link src="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+        <style>
+            .container {
+                margin: 40px;
+            }
+            button {
+                background-color: whitesmoke;
+                margin: 10px;
+            }
+            a {
+                margin: 10px;
+                padding: 5px;
+                border: solid;
+            }
+            table, th, td, tr {
+                border: 1px solid black;
+                padding: 5px;
+            }
+            .paginate {
+                margin-left: 40px;
+            }
+            td {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <h3>Pagination</h3>
+            <div class="row container">
+                <label for="limit">Data per page: </label>
+                <select id="limit" value="5" onclick="setLimit(event)">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
+            </div>
+
+            <div class="row container">
+                <table id="u_table">
+                    <thead id = "header"></thead>
+                    <tbody id = "body"></tbody>
+                </table>
+            </div>
+            <br><br>
+            <div class="row paginate" id="paginations"></div>
+            <br><br>
+
+        </div>
+        <script>
+
+            let objJson = [
+                { name: "Rinkal", class: "123", data: "json"},
+                { name: "Riya", class: "456", data: "string"},
+                { name: "Rinkal", class: "789", data: "object"},
+                { name: "Riya", class: "123", data: "json"},
+                { name: "Redcliff", class: "789", data: "object"},
+                { name: "Riya", class: "456", data: "string"},
+                { name: "Smit", class: "123", data: "json"},
+                { name: "Sanna", class: "789", data: "object"},
+                { name: "Riyanka", class: "456", data: "string"},
+                { name: "Rita", class: "123", data: "json"},
+                { name: "Redcliff", class: "789", data: "object"},
+                { name: "Redcliff", class: "789", data: "object"},
+                { name: "Riya", class: "456", data: "string"},
+                { name: "Smit", class: "123", data: "json"},
+                { name: "Sanna", class: "789", data: "object"},
+                { name: "Riyanka", class: "456", data: "string"},
+                { name: "Rita", class: "123", data: "json"},
+                { name: "Redcliff", class: "789", data: "object"},
+                { name: "Riya", class: "123", data: "json"},
+                { name: "Redcliff", class: "789", data: "object"},
+                { name: "Riya", class: "456", data: "string"},
+                { name: "Smit", class: "123", data: "json"},
+                { name: "Sanna", class: "789", data: "object"},
+                { name: "Riyanka", class: "456", data: "string"},
+                { name: "Rita", class: "123", data: "json"},
+                { name: "Redcliff", class: "789", data: "object"},
+                { name: "Redcliff", class: "789", data: "object"},
+                { name: "Riya", class: "456", data: "string"},
+                { name: "Smit", class: "123", data: "json"},
+                { name: "Sanna", class: "789", data: "object"},
+                { name: "Riyanka", class: "456", data: "string"},
+                { name: "Rita", class: "123", data: "json"},
+                { name: "Redcliff", class: "789", data: "object"}
+            ];
+            let value;
+            let dataCount, data;
+
+            function setLimit(event) {
+                let selectElement = event.target.value;
+                let first = document.getElementById("limit").value;
+                if(dataCount == 5) {
+                    tableUI(data,0);
+                } else {
+                    tableUI(data, selectElement);
+                }
+                return selectElement;
+            }
+
+            function tableUI(data, dataCount) {
+                document.getElementById("header").innerHTML = "";
+                document.getElementById("body").innerHTML = "";
+                let t_head ="";
+                let header = document.getElementById("header");
+                t_head+= "<tr>";
+                t_head+= "<td><b>Name</b></td>";
+                t_head+= "<td><b>Class<b></td>";
+                t_head+= "<td><b>Data</b></td>";
+                t_head+= "<tr>";
+                header.innerHTML = t_head;
+                let table = document.getElementById("u_table");
+                dataCount = document.getElementById("limit").value;
+                for (let i = 0; i < dataCount ; i++) {
+                    let row = table.insertRow(i+1);
+                    let cell1 = row.insertCell(0);
+                    let cell2 = row.insertCell(1);
+                    let cell3 = row.insertCell(2);
+                    cell1.innerHTML = objJson[i]['name'];
+                    cell2.innerHTML = objJson[i]['class'];
+                    cell3.innerHTML = objJson[i]['data'];
+                }
+                return t_head;
+            }
+            let result = tableUI();
+            $("#all-data").append(result);
+
+            function pagination(c, l) {
+                let current = c,
+                    last = l = dataCount,
+                    af_bf_cr = 1,
+                    left = current - af_bf_cr,
+                    right = current + af_bf_cr + 1,
+                    range = [],
+                    rangeWithDots = [],
+                    len;
+                dataCount = document.getElementById("limit").value;
+                for (let i = 1; i <= last; i++) {
+                    if (i == 1 || i == last || i >= left && i < right) {
+                        console.log('i => ',i);
+                        range.push(i);
+                    }
+                }
+                for (let i of range) {
+                    console.log('len =>',len);
+                    if (len) {
+                        if (i - len === 2) {
+                            rangeWithDots.push(l + 1);
+                        } else if (i - len !== 1) {
+                            rangeWithDots.push('...');
+                        }
+                    }
+                    rangeWithDots.push(i);
+                    len = i;
+                }
+                return rangeWithDots;
+            }
+
+            dataCount = document.getElementById("limit").value;
+            let abc = Math.ceil(objJson.length / dataCount);
+            console.log(abc);
+            console.log(pagination(1,objJson.length));
+
+            // for (let i = 1, len = abc; i <= len; i++)
+                // console.log(`Selected page ${i}:`, pagination(i, len));
+
+        </script>
+    </body>
+</html>

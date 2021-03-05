@@ -1,0 +1,60 @@
+<div class="tree-container">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <div class="card">
+    <div class="card-header panel-heading">
+      <span class="left-label" style="font-size: 18px; font-weight: bold; ">Tree structure</span>
+      <a class="pull-right no-link" [ngClass]="{'collapsed': !isExpanded}" data-toggle="collapse" href="javascript:void(0);" (click)="expand()" role="button"
+         [attr.aria-expanded]="isExpanded" aria-controls="nva"> {{ isExpanded ? 'Close' : 'Open' }}
+      </a>
+    </div>
+    <div [ngClass]="{'show': isExpanded}" id="nva" class="collapse" role="tabpanel" aria-labelledby="nva_heading" data-parent="#nva"
+         [attr.aria-expanded]="isExpanded">
+      <div class="card-body">
+<!--        [formGroup]="Form"-->
+        <form class="container mt-3" (ngSubmit)="logValue()">
+<!--          formArrayName="array"-->
+          <div class="row justify-content-center">
+            <div class="col-6">
+              <button type="button" class="btn btn-primary mb-2" (click)="addItem()">Add</button>
+<!--              *ngFor="let li of spec.controls;-->
+              <div class="container border mb-4 p-3" *ngFor="let li of list; let i = index;">
+                <div class="row">
+                  <div class="col-6">
+                    <h4>{{i+1}}</h4>
+                  </div>
+                  <div class="col-6 text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="addItem(i+1)">+</button>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="removeItem(i)">-</button>
+                  </div>
+                </div>
+<!--                formArrayName="array_2"-->
+                <div class="row justify-content-center" *ngIf="itemExist">
+                  <app-sub-tree [myinput]="list" (myOutput)="addItem(i+1)"><p>{{i+1}}</p></app-sub-tree>
+<!--                  <div class="col-6">-->
+<!--                    <button type="button" class="btn btn-primary mb-2" (click)="addItem()">Add</button>-->
+<!--                    <div class="container border mb-4 p-3" *ngFor="let li of spec1.controls; let i = index;">-->
+<!--                      <div class="row">-->
+<!--                        <div class="col-6">-->
+<!--                          <h4>{{i+1}}</h4>-->
+<!--                        </div>-->
+<!--                        <div class="col-6 text-right">-->
+<!--                          <button type="button" class="btn btn-primary btn-sm" (click)="addItem(i+1)">+</button>-->
+<!--                          <button type="button" class="btn btn-danger btn-sm" (click)="removeItem(i)">-</button>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--console.log(i - 1);-->
+<!--const index = this.list.findIndex(x => x.id === i);-->
+<!--console.log(index);-->

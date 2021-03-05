@@ -1,0 +1,32 @@
+<div class="directive-container">
+  <div class="card card-outline-secondary">
+    <div class="card-header">
+      <h3 class="mb-0">Sign Up</h3>
+    </div>
+    <div class="card-body">
+      <form autocomplete="off" class="form" role="form">
+        <div class="form-group">
+          <label for="inputNumber1">Number 1</label>
+          <input class="form-control" id="inputNumber1" placeholder="Write only number here" type="number" pattern="[0-9]*" digitOnly>
+        </div>
+        <div class="form-group">
+          <label for="inputNumber2">Number 2</label>
+          <input class="form-control" appNumDirective id="inputNumber2" placeholder="Only numbers allow" required="" >
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3">Password</label>
+          <input class="form-control" id="inputPassword3" placeholder="Password" required="" type="password">
+          <small class="form-text text-muted" id="passwordHelpBlock">Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.</small>
+        </div>
+        <div class="form-group">
+          <label for="inputVerify3">Verify</label>
+          <input class="form-control" id="inputVerify3" placeholder="Password (again)" required="" type="password">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success float-right" type="submit">Register</button>
+        </div>
+      </form>
+    </div>
+  </div><!-- /form card register -->
+</div>
+

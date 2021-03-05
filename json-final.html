@@ -1,0 +1,300 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <style>
+       div {
+           margin-top: 10px;
+       }
+        ul li ul {
+            display: none;
+            list-style: none;
+            margin-left: -25px;
+            margin-top: 8px;
+        }
+        ul li {
+            padding-left: 10px;
+            list-style: none;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        li:before {
+            font-family: 'FontAwesome';
+            margin: 0 5px 0 -15px;
+            /*color: green;*/
+        }
+        .plus:before {
+            font-family: 'FontAwesome';
+            content: '\002B';
+            border-style: groove;
+            padding: 2px;
+            color: blue;
+            transition-timing-function: ease-out;
+        }
+        .minus:before {
+            font-family: 'FontAwesome';
+            content: '\002D';
+            border-style: groove;
+            padding: 2px;
+            color: blue;
+            transition-timing-function: ease-out;
+        }
+        .text {
+            color: blue;
+            /*background-color: red;*/
+        }
+        .p1 {
+            color: blue;
+        }
+        .value {
+            /*color: red;*/
+            display: inline;
+        }
+        .key {
+            color: black;
+            display: inline;
+        }
+        .area {
+            margin: 50px;
+        }
+       .errormessge {
+           background-color: black;
+           color: white;
+       }
+    </style>
+</head>
+<body>
+    <div class="area">
+        <div id="all-data" class="submenu">
+    </div>
+    <script>
+        let data = '{"Pascal" [{ "Name":"Pascal Made Simple"}]}';
+        function jsonViewer(json) {
+            let li, span, p;
+            let ul = document.createElement('ul');
+                if(typeof json == 'object') {
+                    let objArray = eval(json);
+                    for (let [key, value] of Object.entries(objArray)) {
+                        li = ul.appendChild(document.createElement('li'));
+                        console.log('li displayed',li)
+                        span = li.appendChild(document.createElement('span'));
+                        if(Array.isArray(json) == true) {
+                            span.appendChild(document.createTextNode(key+ ": "));
+                        } else {
+                            span.appendChild(document.createTextNode('"'+key+'"' + ": "));
+                        }
+                        p = li.appendChild(document.createElement('p'));
+                        span.className = 'key';
+                        if (typeof value === 'object') {
+                                if(typeof value === 'string') {
+                                    p.appendChild(jsonViewer('"'+value+'"'));
+                                    $(li).css('color', 'green');
+                                    li.className = 'plus';
+                                } else if(typeof value === 'number') {
+                                    p.appendChild(jsonViewer(value));
+                                    $(li).css('color', 'red');
+                                    li.className = 'plus';
+                                } else if(JSON.stringify(value) == '{}' || JSON.stringify(value) == null ) {
+                                    p.innerHTML = '{}';
+                                } else if(JSON.stringify(value) == '[]') {
+                                    p.innerHTML = '[]';
+                                } else {
+                                    p.appendChild(jsonViewer(value));
+                                    li.className = 'plus';
+                                }
+                                p.className = 'value';
+
+                        }
+                        else {
+                            if(typeof value === 'string') {
+                                p.appendChild(document.createTextNode('"'+value+'"'));
+                                $(li).css('color', 'green');
+                            } else if(typeof value === 'number') {
+                                p.appendChild(document.createTextNode(value));
+                                $(li).css('color', 'red');
+                            } else if (JSON.stringify(value) == '{}') {
+                                p.appendChild(document.createTextNode('{}'));
+                            } else if(JSON.stringify(value) == '[]') {
+                                p.appendChild(document.createTextNode('[]'));
+                            } else {
+                                p.appendChild(document.createTextNode(value));
+                            }
+                            p.className = 'value';
+                        }
+                    }
+                } else {
+                    try {
+                        let objObject = JSON.parse(json);
+                        console.log(objObject)
+                        for (let [key, value] of Object.entries(objObject)) {
+                            li = ul.appendChild(document.createElement('li'));
+                            console.log('li dis', li)
+                            span = li.appendChild(document.createElement('span'));
+                            if(Array.isArray(json) == true) {
+                                span.appendChild(document.createTextNode(key+ ": "));
+                            } else {
+                                span.appendChild(document.createTextNode('"'+key+'"' + ": "));
+                            }
+                            p = li.appendChild(document.createElement('p'));
+                            span.className = 'key';
+                            if (typeof value === 'object') {
+                                if(typeof value === 'string') {
+                                    p.appendChild(jsonViewer('"'+value+'"'));
+                                    $(li).css('color', 'green');
+                                    li.className = 'plus';
+                                } else if(typeof value === 'number') {
+                                    p.appendChild(jsonViewer(value));
+                                    $(li).css('color', 'red');
+                                    li.className = 'plus';
+                                } else if(JSON.stringify(value) == '{}' || JSON.stringify(value) == null ) {
+                                    p.innerHTML = '{}';
+                                } else if(JSON.stringify(value) == '[]') {
+                                    p.innerHTML = '[]';
+                                } else {
+                                    p.appendChild(jsonViewer(value));
+                                    li.className = 'plus';
+                                }
+                                p.className = 'value';
+                            }
+                            else {
+                                if(typeof value === 'string') {
+                                    p.appendChild(document.createTextNode('"'+value+'"'));
+                                    $(li).css('color', 'green');
+                                } else if(typeof value === 'number') {
+                                    p.appendChild(document.createTextNode(value));
+                                    $(li).css('color', 'red');
+                                } else if (JSON.stringify(value) == '{}') {
+                                    p.appendChild(document.createTextNode('{}'));
+                                } else if(JSON.stringify(value) == '[]') {
+                                    p.appendChild(document.createTextNode('[]'));
+                                } else {
+                                    p.appendChild(document.createTextNode(value));
+                                }
+                                p.className = 'value';
+                            }
+                        }
+                    } catch (e) {
+                        //console.log(e.constructor);
+
+                        // let b = ' + '
+                        // let numb = String(e).match(/\d.*/);
+                        // let position = numb;
+                        // let let1 = json.substring(0, position);
+                        // let let2 = b + json.substring(position);
+                        // let res = let1.concat(let2);
+                        // console.log('+++', typeof res);
+                        // ul.appendChild(document.createTextNode(res));
+
+                        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
+
+                       const one = splitFunc(json);
+
+                        // one.forEach((item, i) => {
+                        //     let b = ' + '
+                        //     let numb = String(e).match(/\d.*/);
+                        //     let position = numb;
+                        //     console.log('value: ',item, 'key: ',i);
+                        //     console.log(typeof item);
+                        //     if(typeof item == 'string') {
+                        //         const two = splitFunc(item);
+                        //         let res2 = displayUI(two);
+                        //         console.log(res2);
+                        //     }
+                        // });
+                    }
+                }
+            console.log('ui displayed', ul)
+            return ul;
+        }
+        function splitFunc(datas) {
+            let one;
+            const json1 = datas.replace('{', '');
+            const json2 = json1.replace('}', '');
+            for(let i=0; i<=datas.length; i++) {
+                if(datas.includes(',')) {
+                    one = json2.split(',');
+                    return one;
+                } else if(datas.includes(':')) {
+                    one = json2.split(':');
+                    return one;
+                }
+            }
+            return one;
+        }
+
+        function displayUI(dataas) {
+            let li, span, p;
+            let ul = document.createElement('ul');
+            if(typeof dataas == 'object') {
+                let objArray = eval(dataas);
+                for (let [key, value] of Object.entries(objArray)) {
+                    li = ul.appendChild(document.createElement('li'));
+                    span = li.appendChild(document.createElement('span'));
+                    if(Array.isArray(dataas) == true) {
+                        span.appendChild(document.createTextNode(key+ ": "));
+                    } else {
+                        span.appendChild(document.createTextNode('"'+key+'"' + ": "));
+                    }
+                    p = li.appendChild(document.createElement('p'));
+                    span.className = 'key';
+                    if (typeof value === 'object') {
+                        if(typeof value === 'string') {
+                            p.appendChild(jsonViewer('"'+value+'"'));
+                            $(li).css('color', 'green');
+                            li.className = 'plus';
+                        } else if(typeof value === 'number') {
+                            p.appendChild(jsonViewer(value));
+                            $(li).css('color', 'red');
+                            li.className = 'plus';
+                        } else if(JSON.stringify(value) == '{}' || JSON.stringify(value) == null ) {
+                            p.innerHTML = '{}';
+                        } else if(JSON.stringify(value) == '[]') {
+                            p.innerHTML = '[]';
+                        } else {
+                            p.appendChild(jsonViewer(value));
+                            li.className = 'plus';
+                        }
+                        p.className = 'value';
+
+                    }
+                    else {
+                        if(typeof value === 'string') {
+                            p.appendChild(document.createTextNode('"'+value+'"'));
+                            $(li).css('color', 'green');
+                        } else if(typeof value === 'number') {
+                            p.appendChild(document.createTextNode(value));
+                            $(li).css('color', 'red');
+                        } else if (JSON.stringify(value) == '{}') {
+                            p.appendChild(document.createTextNode('{}'));
+                        } else if(JSON.stringify(value) == '[]') {
+                            p.appendChild(document.createTextNode('[]'));
+                        } else {
+                            p.appendChild(document.createTextNode(value));
+                        }
+                        p.className = 'value';
+                    }
+                }
+            }
+            return ul;
+        }
+
+        let result = jsonViewer(data);
+        console.log(result);
+        $("#all-data").append(result);
+        $('li').click(function (e) {
+            if ($(this).hasClass('plus') === true) {
+                $(this).removeClass('plus').addClass('minus');
+            } else {
+                $(this).removeClass('minus').addClass('plus');
+            }
+            $(this).children('p').children('ul').slideToggle();
+            e.stopPropagation();
+        });
+    </script>
+</div>
+</body>
+</html>

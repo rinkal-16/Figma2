@@ -1,0 +1,231 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Pagination</title>
+            <style type="text/css">
+                .container {
+                    margin-top: 30px;
+                    margin-left: 30px;
+                }
+                .search { 
+                    margin-left: 30px;
+                }
+                #myInput {
+                    background-position: 10px 10px;
+                    background-repeat: no-repeat;
+                    font-size: 16px;
+                    padding: 5px 10px 5px 20px;
+                    border: 1px solid #ddd;
+                }
+                #myTable {
+                    border-collapse: collapse;
+                    border: 1px solid #ddd;
+                    font-size: 18px;
+                }
+                #myTable th, #myTable td {
+                    text-align: left;
+                    padding: 5px;
+                }
+                #myTable tr {
+                    border-bottom: 1px solid #ddd;
+                }
+                #myTable tr.header, #myTable tr:hover {
+                    background-color: #f1f1f1;
+                }
+                table, th, td { border: 1px solid black; }
+                table,#container{ margin: 50px; }
+                .pagination {
+                    display: inline-block;
+                }
+                .pagination a {
+                    color: black;
+                    float: left;
+                    padding: 8px 16px;
+                    text-decoration: none;
+                }
+                .pgn_box {
+                    margin-left: 10px;
+                    margin-right: 10px;
+                }
+                .page_box {
+                    border: inherit;
+                    margin: 10px;
+                    border-color: black;
+                }
+                li, a {
+                    text-decoration: none;
+                    list-style-type: none;
+                }
+            </style>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        </head>
+        <body>
+        <div>
+            <div class="row container">
+                <label for="limit">Data per page: </label>
+                <select id="limit" value="5" onchange="displaySecond(1, 45, null, this.value)">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
+                <input type="text" class="search" id="myInput" placeholder="Search here" onkeyup="displaySecond()">
+            </div>
+            <table class="container" id="myTable">
+                <tr class="header">
+                    <th class="th">No</th>
+                    <th class="th">Name</th>
+                    <th class="th">Data type</th>
+                    <th class="th">Number</th>
+                </tr>
+                <tbody id="data"></tbody>
+            </table>
+            <div id="container">
+                <nav aria-label="Page navigation example">
+                    <ul  class="pagination" style="display: flex; text-decoration: none">
+                        <li class="page-item previous-item">
+                            <a class="page-link" id="previous">&laquo;</a>
+                        </li>
+                        <li class="page-item" > <span id="page_box"></span> </li>
+                        <li class="page-item next-item">
+                            <a class="page-link" id="next">&raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <script type="text/javascript">
+            let objJson = [
+                    { name: "Rinkal", class: "123", data: "json"},
+                    { name: "Riya", class: "456", data: "string"},
+                    { name: "Rinkal", class: "789", data: "object"},
+                    { name: "Riya", class: "123", data: "json"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Riya", class: "456", data: "string"},
+                    { name: "Smit", class: "123", data: "json"},
+                    { name: "Sanna", class: "789", data: "object"},
+                    { name: "Riyanka", class: "456", data: "string"},
+                    { name: "Rita", class: "123", data: "json"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Riya", class: "456", data: "string"},
+                    { name: "Smit", class: "123", data: "json"},
+                    { name: "Sanna", class: "789", data: "object"},
+                    { name: "Riyanka", class: "456", data: "string"},
+                    { name: "Rita", class: "123", data: "json"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Riya", class: "123", data: "json"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Riya", class: "456", data: "string"},
+                    { name: "Smit", class: "123", data: "json"},
+                    { name: "Sanna", class: "789", data: "object"},
+                    { name: "Riyanka", class: "456", data: "string"},
+                    { name: "Rita", class: "123", data: "json"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Riya", class: "456", data: "string"},
+                    { name: "Smit", class: "123", data: "json"},
+                    { name: "Sanna", class: "789", data: "object"},
+                    { name: "Riyanka", class: "456", data: "string"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Riya", class: "123", data: "json"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Riya", class: "456", data: "string"},
+                    { name: "Smit", class: "123", data: "json"},
+                    { name: "Sanna", class: "789", data: "object"},
+                    { name: "Riyanka", class: "456", data: "string"},
+                    { name: "Rita", class: "123", data: "json"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Redcliff", class: "789", data: "object"},
+                    { name: "Riya", class: "456", data: "string"},
+                    { name: "Smit", class: "123", data: "json"},
+                    { name: "Sanna", class: "789", data: "object"},
+                    { name: "Riyanka", class: "456", data: "string"},
+            ];
+            currentPage = 1;
+            total = objJson.length;
+            let setLimit;
+            function displaySecond(currentPage, total, searchFilter, limit) {
+                let selectElement = event.target.value;
+                setLimit = document.getElementById("limit").value;
+                let lastPageCount = Math.ceil(objJson.length / setLimit);
+                let jsonData = '';
+                let matches = [];
+                let input, filter;
+                input = document.getElementById("myInput");
+                filter = input.value;
+                let regexp = new RegExp(filter, 'g');
+                for (let i = 0; i < objJson.length; i++) {
+                    for (let key in objJson[i]) {
+                        if (objJson[i][key].match(regexp)) matches.push(objJson[i]);
+                    }
+                }
+                console.log(matches);
+
+                let c,
+                    current = currentPage,
+                    beforeAfterCurrent = 1,
+                    left = current - beforeAfterCurrent,
+                    right = current + beforeAfterCurrent + 1,
+                    range = [],
+                    rangeWithDots = [],
+                    l;
+                for (let i = 1; i <= lastPageCount; i++) {
+                    if (i == 1 || i == lastPageCount || i >= left && i < right) range.push(i);            
+                }
+                for (let i of range) {
+                    if (l) {
+                        // if (i - l === 2) rangeWithDots.push(l);
+                        // else
+                        if(i - l !== 1) rangeWithDots.push('...');
+                    }
+                    rangeWithDots.push(i);
+                    l = i;
+                }
+                let tempArray;
+                let k;
+                let lenOfPage = rangeWithDots.length;
+                $("#page_box").empty();
+                for(k=0; k < lenOfPage; k++) {
+                    tempArray = rangeWithDots.splice(0, 1);
+                    let span = document.createElement('span');
+                    let li = span.appendChild(document.createElement('li'));
+                    let a = li.appendChild(document.createElement('a'));
+                    a.appendChild(document.createTextNode(tempArray));
+                    $("#page_box").append(a);
+                    jsonData = '';
+                    for (let i = (currentPage - 1) * setLimit; i < (currentPage * setLimit); i++) {
+                        if (i < objJson.length) jsonData += '<tr><td class="td">' + (i + 1) + '</td><td class="td">' + objJson[i].name + '</td><td class="td">' + objJson[i].data + '</td><td class="td">' + objJson[i].class + '</td>';
+                        document.getElementById('data').innerHTML = jsonData;
+                    }
+                }
+                $('a').click(function (e) {
+                    displaySecond(e.target.text, objJson.length, null, setLimit);
+                });
+                $('#previous').click(function (e) {
+                    if(currentPage <= 1) {
+                        currentPage = 1;
+                        displaySecond(1, objJson.length, null, setLimit);
+                    }
+                    else {
+                        currentPage -= 1;
+                        displaySecond(currentPage, objJson.length, null, setLimit);
+                    }
+                });
+                $('#next').click(function (e) {
+                    if(currentPage >= lastPageCount) {
+                        currentPage = lastPageCount;
+                        displaySecond(currentPage, objJson.length, null, setLimit);
+                    }
+                    else {
+                        currentPage += 1;
+                        displaySecond(currentPage, objJson.length, null, setLimit);
+                    }
+                });
+                return jsonData;
+            }
+            window.onload = function () {
+                displaySecond(currentPage, objJson.length, null, setLimit);
+            };
+</script>
+</body>
+</html>
