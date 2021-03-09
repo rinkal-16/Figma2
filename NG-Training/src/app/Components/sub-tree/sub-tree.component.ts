@@ -1,105 +1,64 @@
-import {Component, ElementRef, OnInit, Output, ViewChild, Input, EventEmitter, SimpleChanges} from '@angular/core';
-// tslint:disable-next-line:class-name
-interface list {
-  id: 1;
-  subItem: list[];
-}
+import {Component, EventEmitter, Input, OnInit, Output, VERSION} from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormArray } from '@angular/forms';
+
 @Component({
   selector: 'app-sub-tree',
   templateUrl: './sub-tree.component.html',
   styleUrls: ['./sub-tree.component.scss']
 })
+export class SubTreeComponent implements OnInit{
 
-export class SubTreeComponent implements OnInit {
-  @Input() parentData: any;
-  @Input() myArray: list[] = [];
-  @Input() i: any;
-
-  constructor() { }
+  form!: FormGroup;
   isExpanded = true;
-  listId: any;
-  itemExist = false;
-  // @ts-ignore
 
-  ngOnInit(): void {
-    console.log(this.i);
-  }
-  // tslint:disable-next-line:typedef use-lifecycle-interface
-  ngOnChanges(changes: SimpleChanges) {
-  }
+  // tslint:disable-next-line:no-output-rename
+  @Output('parentId') parentId: any;
+  @Input() dates: any;
 
-  // tslint:disable-next-line:typedef
-  sendValue(i?: string | number): void {
-    // this.data += 1;
-    console.log(i);
-    // @ts-ignore
-    // tslint:disable-next-line:no-bitwise
-    const pqr = i === +i && i !== (i | 0);
-    console.log(pqr);
-    // @ts-ignore
-    const xyz = this.myArray.includes(this.myArray[i - 1]);
-    console.log(xyz);
-    if (xyz === false && pqr === false) {
-      console.log('if call...');
-      this.myArray.push({
-        subItem: [],
-        id: this.myArray.length + 1
-      } as list);
-      console.log((this.myArray));
-    }
-    else {
-      console.log('else called...');
-      console.log('check float cond: ', pqr, this.myArray);
-      // @ts-ignore
-      console.log(typeof this.myArray);
-      // @ts-ignore
-      const index = this.myArray.findIndex(x => this.myArray[i + 1]);
-      console.log('index: ', index);
-      // tslint:disable-next-line:prefer-for-of
-      // for (let k = 0; k < this.myArray.length; k++) {
-      const rps = this.myArray.findIndex(x => x.id === i);
-      console.log('rps: ', rps);
-      if (this.myArray[rps]) {
-        console.log('nested called...');
-        const abc = this.myArray[rps].subItem.length + 1;
-        console.log('abc: ', abc);
-        console.log(this.myArray[rps].subItem.push({subItem: [], id: i + '.' + abc} as unknown as list));
-        console.log(this.myArray);
-        this.listId = this.myArray[rps].id;
-        this.itemExist = true;
-      }
-      // @ts-ignore
-      if (this.myArray[i] === undefined) {
-        // console.log(this.myArray.push({subItem: [], id: 1.1} as unknown as list));
-      }
-      // console.log(this.myArray.length);
-      // const abc = this.myArray[i].subItem.length + 1;
-      // console.log('abc: ', abc, this.myArray);
-      // // console.log(this.list[i - 1].subItem.push({id: i + '.' + abc}));
-      // // @ts-ignore
-      // this.myArray[i].subItem.push({id: i + '.' + abc});
-      // console.log(this.myArray);
-      console.log(this.myArray);
-    }
+  constructor(private fb: FormBuilder) {
+    this.createForm();
   }
 
   expand(): void {
     this.isExpanded = !this.isExpanded;
   }
 
-  // const index = this.list.indexOf(this.list[i]);
-  // console.log('value: ', i, 'index: ', index);
 
-  // @ts-ignore
-
-
-
-  removeItem(i: number): void {
-    this.myArray.splice(i, 1);
+  // tslint:disable-next-line:typedef
+  _addGroup() {
+    this.groupsFormArray.push(
+      this.fb.control({
+        id: this.groupsFormArray.length + 1,
+        groups: []
+      })
+    );
+    for (let n = 0; n < this.groupsFormArray.length; n++) {
+      this.parentId = this.groupsFormArray.value[n].id;
+      console.log(this.parentId);
+    }
   }
-  logValue(): void {
-    console.log(this.myArray);
+
+  // tslint:disable-next-line:typedef
+  delete(index: number) {
+    this.groupsFormArray.removeAt(index);
   }
 
+  get groupsFormArray(): FormArray {
+    // @ts-ignore
+    return this.form.get('main').get('groups') as FormArray;
+  }
 
+  // tslint:disable-next-line:typedef
+  private createForm() {
+    this.form = this.fb.group({
+      id: 1,
+      main: this.fb.group({
+        groups: this.fb.array([])
+      })
+    });
+  }
+
+  ngOnInit(): void {
+    console.log('parent: ', this.dates);
+  }
 }

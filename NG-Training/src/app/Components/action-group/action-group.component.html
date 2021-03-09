@@ -1,0 +1,18 @@
+<form [formGroup]="form">
+  <div style="margin-left: 50px;">
+    <span>{{formLabel}}</span>
+    <div>
+      <app-action-button (remove)="remove.emit()"
+                              (addGroup)="addGroup()">
+      </app-action-button>
+      <ng-container formArrayName="groups">
+        <app-action-group (remove)="deleteGroupFromArray(i)"
+                          *ngFor="let s of _groupsFormArray?.controls; index as i"
+                          [formControlName]="i"
+                          [formLabel]="'Id: ' + data +'.'+ this._groupsFormArray.value[i].id"
+                          [dates]="this._groupsFormArray.value[i].id">
+        </app-action-group>
+      </ng-container>
+    </div>
+  </div>
+</form>

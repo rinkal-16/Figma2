@@ -62,24 +62,26 @@ export class TreeStructureComponent implements AfterViewInit, OnInit {
 
   // @ts-ignore
 
-  addItem(i?): void {
-    console.log(i);
+  addItem(id?: number | undefined): void {
+    console.log(id);
     // @ts-ignore
     // tslint:disable-next-line:no-bitwise
-    const pqr = i === +i && i !== (i | 0);
+    const pqr = id === +id && id !== (id | 0);
     console.log(pqr);
-    const xyz = this.myArray.includes(this.myArray[i - 1]);
+    // @ts-ignore
+    const xyz = this.myArray.includes(this.myArray[id - 1]);
     console.log(xyz);
     if (xyz !== false) {
       console.log('else called...');
-      const index = this.myArray.findIndex(x => this.myArray[i + 1]);
-      const rps = this.myArray.findIndex(x => x.id === i);
+      // @ts-ignore
+      const index = this.myArray.findIndex(x => this.myArray[id + 1]);
+      const rps = this.myArray.findIndex(x => x.id === id);
       this.itemExist = true;
       if (this.myArray[rps]) {
         console.log('nested called...');
         const abc = this.myArray[rps].subItem.length + 1;
         console.log('abc: ', abc);
-        this.myArray[rps].subItem.push({subItem: [], id: i + '.' + abc} as unknown as list);
+        this.myArray[rps].subItem.push({subItem: [], id: id + '.' + abc} as unknown as list);
       }
       this.myArray.map((item: { subItem: any[]; }) => (
         item.subItem.map((subValue) => (
@@ -98,30 +100,33 @@ export class TreeStructureComponent implements AfterViewInit, OnInit {
     } else {
       if (pqr === false) {
         console.log('if call...');
+        // @ts-ignore
         this.myArray.push({
           subItem: [],
-          id: this.myArray.length + 1
+          id: this.myArray.length + 1,
         } as list);
         console.log((this.myArray));
       } else {
         console.log('else called...');
-        const index = this.myArray.findIndex(x => this.myArray[i + 1]);
-        const rps = this.myArray.findIndex(x => x.id === i);
+        // @ts-ignore
+        const index = this.myArray.findIndex(x => this.myArray[id + 1]);
+        const rps = this.myArray.findIndex(x => x.id === id);
         // console.log('rps: ', rps);
         this.itemExist = true;
         if (this.myArray[rps]) {
           console.log('nested called...');
           const abc = this.myArray[rps].subItem.length + 1;
           console.log('abc: ', abc);
-          console.log(this.myArray[rps].subItem.push({subItem: [], id: i + '.' + abc} as unknown as list));
+          console.log(this.myArray[rps].subItem.push({subItem: [], id: id + '.' + abc} as unknown as list));
           this.listId = this.myArray[rps].id;
         }
       }
     }
   }
-  removeItem(i: number): void {
-    console.log(i);
-    this.myArray.splice(i, 1);
+  removeItem(id: number): void {
+    console.log('id: ', id, id - 1);
+    this.myArray.splice(id - 1, 1);
+    console.log(this.myArray);
   }
 
   logValue(): void {

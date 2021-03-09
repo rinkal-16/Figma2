@@ -21,8 +21,8 @@
                 <div class="row">
                   <h6>{{li.id}}</h6>
                   <div class="col-12 text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="addItem(li.id)">+</button>
-                    <button type="button" class="btn btn-danger btn-sm" (click)="removeItem(i)">-</button>
+                    <button type="button" class="btn btn-primary btn-sm" (click)="addItem(li.id+1)">+</button>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="removeItem(li.id)">-</button>
                   </div>
                   <div *ngFor="let li2 of resultArray; let j = index;">
                     <div class="container border-danger" *ngIf="li2[j]">
@@ -40,6 +40,9 @@
             </div>
           </div>
         </form>
+
+
+
     </div>
   </div>
 </div>

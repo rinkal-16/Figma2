@@ -1,0 +1,35 @@
+<form class="example-form" [formGroup]="userForm">
+  <div>
+    <mat-card class="example-card">
+      <mat-card-content>
+        <div class="form-row org-desc-parent-margin">
+          <button mat-raised-button (click)="addAddress()">Add</button>
+<!--          <button mat-raised-button (click)="removeAddress()">Delete</button>-->
+        </div>
+        <div formArrayName="address">
+          <div class="address-container" *ngFor="let group of addressArray.controls; let i = index;"
+               [formGroupName]="i" class="ml-4">
+            <fieldset>
+              <legend>
+                <h3>{{i + 1}}</h3>
+              </legend>
+              <div formArrayName='contacts'>
+                <button mat-raised-button (click)="addContact(i)">Add</button>
+                <button mat-raised-button (click)="removeAddress(i+1)">Delete</button>
+<!--                *ngFor="let subgroup of group.controls.contacts.controls; let idx = index;" [formGroupName]="idx"-->
+                <div class="ml-4">
+                  <legend>
+                    <h3>{{ i + 1 + '.'}}</h3>
+                  </legend>
+                </div>
+
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</form>
+
