@@ -18,7 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Tree3Component } from './Components/tree3/tree3.component';
 import { ActionButtonComponent } from './Components/action-button/action-button.component';
 import { ActionGroupComponent } from './Components/action-group/action-group.component';
-
+import { Globals } from './Components/globals';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,8 @@ import { ActionGroupComponent } from './Components/action-group/action-group.com
     TreeNodeComponent,
     Tree3Component,
     ActionButtonComponent,
-    ActionGroupComponent
+    ActionGroupComponent,
+
   ],
     imports: [
         BrowserModule,
@@ -42,9 +43,10 @@ import { ActionGroupComponent } from './Components/action-group/action-group.com
         MatCheckboxModule,
         MatInputModule,
         MatCardModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+
     ],
-  providers: [],
+  providers: [Globals],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

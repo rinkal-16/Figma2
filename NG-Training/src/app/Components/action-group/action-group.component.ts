@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
+import { Globals } from '../globals';
 
 export interface GroupControlComponentData {
   conjunctor: null;
@@ -46,8 +46,11 @@ export class ActionGroupComponent
   @Input() data: any;
   // tslint:disable-next-line:no-output-rename
   @Output('parentId') parentId: any;
+  @Output() public getUserData = new EventEmitter<string>();
 
   form!: FormGroup;
+  expandedIndex: number;
+
 
   private onChange: ((
     value: GroupControlComponentData | null | undefined
@@ -55,14 +58,34 @@ export class ActionGroupComponent
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, public globalId: Globals) {
+    this.expandedIndex = -1;
+  }
 
   // tslint:disable-next-line:typedef
   ngOnInit() {
-    console.log('child: ', this.data);
     this.createFormGroup();
     this._setupObservables();
+    console.log('child global---', this.globalId.dataID);
+
+    const arr: any[] = [];
+    const abc = this.globalId;
+    // tslint:disable-next-line:only-arrow-functions typedef
+    Object.keys(abc).map(function(key){
+      // @ts-ignore
+      arr.push({[key]: abc[key]});
+      return arr;
+    });
+    console.log('Array=sss',  this.globalId.dataID);
+
   }
+
+
+  expandRow(index: number): void {
+    this.expandedIndex = index === this.expandedIndex ? -1 : index;
+  }
+
+  // tslint:disable-next-line:typedef
 
   // tslint:disable-next-line:typedef
   ngOnDestroy() {
@@ -108,17 +131,20 @@ export class ActionGroupComponent
   }
 
   // tslint:disable-next-line:typedef
-  addGroup() {
+  addGroup(id?: number | any) {
     this._groupsFormArray.push(
       this.fb.control({
         id: this._groupsFormArray.length + 1,
         groups: []
       })
     );
+    // console.log('data: ', this.data);
     for (let n = 0; n < this._groupsFormArray.length; n++) {
-      this.parentId = this._groupsFormArray.value[n].id;
-      console.log(this.parentId);
+
+      //this.globalId.dataID = this.data + '.' + this._groupsFormArray.value[n].id;
+
     }
+    // console.log('action-group: ', this.globalId.dataID);
   }
 
   get _conditionsFormArray(): FormArray {

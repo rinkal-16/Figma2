@@ -13,7 +13,9 @@ export class ActionButtonComponent implements OnInit {
   @Output()
   addGroup: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor() { }
+  constructor() {
+
+  }
 
   ngOnInit(): void {
   }

@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, VERSION} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray } from '@angular/forms';
+import { Globals } from '../globals';
 
 @Component({
   selector: 'app-sub-tree',
@@ -10,13 +11,21 @@ export class SubTreeComponent implements OnInit{
 
   form!: FormGroup;
   isExpanded = true;
+  expandedIndex: number;
+  @Input() data2: any;
 
   // tslint:disable-next-line:no-output-rename
   @Output('parentId') parentId: any;
-  @Input() dates: any;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, public globalId: Globals) {
+    this.globalId.dataID = 1;
     this.createForm();
+    this.expandedIndex = -1;
+  }
+
+
+  expandRow(index: number): void {
+    this.expandedIndex = index === this.expandedIndex ? -1 : index;
   }
 
   expand(): void {
@@ -32,10 +41,11 @@ export class SubTreeComponent implements OnInit{
         groups: []
       })
     );
+    // console.log('data: ', this.data2);
     for (let n = 0; n < this.groupsFormArray.length; n++) {
-      this.parentId = this.groupsFormArray.value[n].id;
-      console.log(this.parentId);
+      this.globalId.dataID = this.groupsFormArray.value[n].id;
     }
+    // console.log('sub-group: ', this.globalId.dataID);
   }
 
   // tslint:disable-next-line:typedef
@@ -59,6 +69,7 @@ export class SubTreeComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    console.log('parent: ', this.dates);
+    this.globalId.dataID = 1;
+    console.log('parent global: ', this.globalId.dataID);
   }
 }

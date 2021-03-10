@@ -5,12 +5,16 @@
       <app-action-button (remove)="remove.emit()"
                               (addGroup)="addGroup()">
       </app-action-button>
-      <ng-container formArrayName="groups">
-        <app-action-group (remove)="deleteGroupFromArray(i)"
-                          *ngFor="let s of _groupsFormArray?.controls; index as i"
+
+      <ng-container formArrayName="groups"  *ngFor="let s of _groupsFormArray?.controls; index as i">
+        <div (click)="expandRow(i)"><button class="btn btn-outline-primary">Open</button></div>
+        <app-action-group [data]="data + '. ' + this._groupsFormArray.value[i].id"
+                          (remove)="deleteGroupFromArray(i)"
+                          *ngIf="i === expandedIndex"
                           [formControlName]="i"
-                          [formLabel]="'Id: ' + data +'.'+ this._groupsFormArray.value[i].id"
-                          [dates]="this._groupsFormArray.value[i].id">
+                          style="margin-left: 20px;"
+                          [formLabel]="'child: ' + data + '. ' + this._groupsFormArray.value[i].id"
+        >
         </app-action-group>
       </ng-container>
     </div>

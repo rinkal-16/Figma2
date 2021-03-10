@@ -10,32 +10,33 @@
     <div [ngClass]="{'show': isExpanded}" id="nva" class="collapse" role="tabpanel" aria-labelledby="nva_heading" data-parent="#nva"
          [attr.aria-expanded]="isExpanded">
       <div class="card-body">
+        <div>
+            <section class="top-bar">
+              <button type="button" class="btn btn-outline-primary"
+                      label="Add Statement"
+                      (click)="_addGroup()">add node</button>
+            </section>
+            <form [formGroup]="form">
+              <ng-container formGroupName="main">
+                <ng-container formArrayName="groups">
+                  <ng-container *ngFor="let group of groupsFormArray?.controls; index as i">
+                    <div (click)="expandRow(i)"><button class="btn btn-outline-primary">Open</button></div>
+                      <app-action-group (remove)="delete(i)"
+                                        [formControlName]="i"
+                                        [data]="this.groupsFormArray.value[i].id"
+                                        [formLabel]="'parent: ' +  this.groupsFormArray.value[i].id"
+                                        *ngIf="i === expandedIndex"
+                                        style="margin-left: 20px;">
+                      </app-action-group>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
 
-
-      <div>
-  <section class="top-bar">
-    <button type="button"
-            label="Add Statement"
-            (click)="_addGroup()">add node</button>
-  </section>
-
-  <form [formGroup]="form">
-    <ng-container formGroupName="main">
-      <ng-container formArrayName="groups">
-        <ng-container *ngFor="let group of groupsFormArray?.controls; index as i">
-          <app-action-group (remove)="delete(i)"
-                            [data]="this.groupsFormArray.value[i].id"
-                            [formControlName]="i"
-                            [formLabel]="'Index: ' + (i+1) + ' , ' + 'Id: '+ this.groupsFormArray.value[i].id">
-          </app-action-group>
-        </ng-container>
-      </ng-container>
-    </ng-container>
-  </form>
-</div>
-<br>
-<br>
+            </form>
+        </div>
       </div>
+      <br>
+      <br>
     </div>
   </div>
 </div>
