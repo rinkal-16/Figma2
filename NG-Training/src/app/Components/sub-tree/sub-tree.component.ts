@@ -13,10 +13,8 @@ export class SubTreeComponent implements OnInit{
   isExpanded = true;
   expandedIndex: number;
   @Input() data2: any;
-
   // tslint:disable-next-line:no-output-rename
   @Output('parentId') parentId: any;
-
   constructor(private fb: FormBuilder, public globalId: Globals) {
     this.globalId.dataID = 1;
     this.createForm();
@@ -35,18 +33,18 @@ export class SubTreeComponent implements OnInit{
 
   // tslint:disable-next-line:typedef
   _addGroup() {
+    // console.log('Add Group...', this.groupsFormArray.controls[n].value.id);
     this.groupsFormArray.push(
       this.fb.control({
         id: this.groupsFormArray.length + 1,
         groups: []
       })
     );
-    // console.log('data: ', this.data2);
     for (let n = 0; n < this.groupsFormArray.length; n++) {
       this.globalId.dataID = this.groupsFormArray.value[n].id;
     }
-    // console.log('sub-group: ', this.globalId.dataID);
   }
+  
 
   // tslint:disable-next-line:typedef
   delete(index: number) {

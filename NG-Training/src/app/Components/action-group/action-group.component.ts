@@ -139,11 +139,11 @@ export class ActionGroupComponent
       })
     );
     // console.log('data: ', this.data);
-    for (let n = 0; n < this._groupsFormArray.length; n++) {
-
-      //this.globalId.dataID = this.data + '.' + this._groupsFormArray.value[n].id;
-
-    }
+    // for (let n = 0; n < this._groupsFormArray.length; n++) {
+    //
+    //   //this.globalId.dataID = this.data + '.' + this._groupsFormArray.value[n].id;
+    //
+    // }
     // console.log('action-group: ', this.globalId.dataID);
   }
 

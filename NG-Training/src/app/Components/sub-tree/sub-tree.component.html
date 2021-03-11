@@ -11,27 +11,32 @@
          [attr.aria-expanded]="isExpanded">
       <div class="card-body">
         <div>
-            <section class="top-bar">
+            <section class="top-bar mb-4">
               <button type="button" class="btn btn-outline-primary"
-                      label="Add Statement"
-                      (click)="_addGroup()">add node</button>
+                      (click)="_addGroup()">Add node</button>
             </section>
             <form [formGroup]="form">
               <ng-container formGroupName="main">
                 <ng-container formArrayName="groups">
                   <ng-container *ngFor="let group of groupsFormArray?.controls; index as i">
-                    <div (click)="expandRow(i)"><button class="btn btn-outline-primary">Open</button></div>
-                      <app-action-group (remove)="delete(i)"
-                                        [formControlName]="i"
-                                        [data]="this.groupsFormArray.value[i].id"
-                                        [formLabel]="'parent: ' +  this.groupsFormArray.value[i].id"
-                                        *ngIf="i === expandedIndex"
-                                        style="margin-left: 20px;">
-                      </app-action-group>
+                    <mat-accordion>
+                      <mat-expansion-panel>
+                        <mat-expansion-panel-header (click)="expandRow(i)">
+                          <mat-panel-title>
+                            Node: {{this.groupsFormArray.value[i].id}}
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <app-action-group (remove)="delete(i)"
+                                          [formControlName]="i"
+                                          [data]="this.groupsFormArray.value[i].id"
+                                          *ngIf="i === expandedIndex"
+                                          >
+                        </app-action-group>
+                      </mat-expansion-panel>
+                    </mat-accordion>
                   </ng-container>
                 </ng-container>
               </ng-container>
-
             </form>
         </div>
       </div>
@@ -40,4 +45,4 @@
     </div>
   </div>
 </div>
-<pre>{{ form.value | json }}</pre>
+<!--<pre>{{ form.value | json }}</pre>-->

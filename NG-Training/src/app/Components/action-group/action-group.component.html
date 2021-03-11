@@ -1,22 +1,21 @@
 <form [formGroup]="form">
-  <div style="margin-left: 50px;">
-    <span>{{formLabel}}</span>
-    <div>
-      <app-action-button (remove)="remove.emit()"
-                              (addGroup)="addGroup()">
-      </app-action-button>
-
-      <ng-container formArrayName="groups"  *ngFor="let s of _groupsFormArray?.controls; index as i">
-        <div (click)="expandRow(i)"><button class="btn btn-outline-primary">Open</button></div>
-        <app-action-group [data]="data + '. ' + this._groupsFormArray.value[i].id"
-                          (remove)="deleteGroupFromArray(i)"
-                          *ngIf="i === expandedIndex"
-                          [formControlName]="i"
-                          style="margin-left: 20px;"
-                          [formLabel]="'child: ' + data + '. ' + this._groupsFormArray.value[i].id"
-        >
-        </app-action-group>
+  <app-action-button (remove)="remove.emit()"
+                     (addGroup)="addGroup()">
+  </app-action-button>
+      <ng-container>
+        <mat-accordion>
+          <mat-expansion-panel formArrayName="groups"  *ngFor="let s of _groupsFormArray?.controls; index as i">
+            <mat-expansion-panel-header (click)="expandRow(i)">
+              <mat-panel-title>
+                Node: {{data + '. ' + this._groupsFormArray.value[i].id}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <app-action-group [data]="data + '. ' + this._groupsFormArray.value[i].id"
+                              (remove)="deleteGroupFromArray(i)"
+                              *ngIf="i === expandedIndex"
+                              [formControlName]="i">
+            </app-action-group>
+          </mat-expansion-panel>
+        </mat-accordion>
       </ng-container>
-    </div>
-  </div>
 </form>

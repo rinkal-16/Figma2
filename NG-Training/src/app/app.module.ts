@@ -19,6 +19,8 @@ import { Tree3Component } from './Components/tree3/tree3.component';
 import { ActionButtonComponent } from './Components/action-button/action-button.component';
 import { ActionGroupComponent } from './Components/action-group/action-group.component';
 import { Globals } from './Components/globals';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import { Globals } from './Components/globals';
         MatInputModule,
         MatCardModule,
         BrowserAnimationsModule,
-
+        NgbModule,
+        MatExpansionModule
     ],
   providers: [Globals],
   bootstrap: [AppComponent]
