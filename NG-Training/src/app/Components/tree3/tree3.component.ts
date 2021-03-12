@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import { FormGroup, FormArray, FormBuilder } from '@angular/forms'
+import {Component, Input, OnInit} from '@angular/core';
+import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
 
 @Component({
@@ -8,19 +8,24 @@ import { FormGroup, FormArray, FormBuilder } from '@angular/forms'
   styleUrls: ['./tree3.component.scss']
 })
 export class Tree3Component implements OnInit {
+  // tslint:disable-next-line:variable-name
+  private _groupsFormArray: any;
+
+
+  constructor(private fb: FormBuilder) {
+
+    this.empForm = this.fb.group({
+      employees: this.fb.array([]),
+      skills: this.fb.array([])
+    });
+  }
 
   title = 'Nested FormArray Example Add Form Fields Dynamically';
 
   empForm: FormGroup;
   isExpanded = true;
 
-
-  constructor(private fb: FormBuilder) {
-
-    this.empForm = this.fb.group({
-      employees: this.fb.array([]) ,
-    });
-  }
+  @Input() formGroup!: FormGroup;
 
   expand(): void {
     this.isExpanded = !this.isExpanded;
@@ -28,7 +33,7 @@ export class Tree3Component implements OnInit {
 
 
   employees(): FormArray {
-    return this.empForm.get('employees') as FormArray
+    return this.empForm.get('employees') as FormArray;
   }
 
 
@@ -53,9 +58,8 @@ export class Tree3Component implements OnInit {
     this.employees().removeAt(empIndex);
   }
 
-
   employeeSkills(empIndex: number): FormArray {
-    return this.employees().at(empIndex).get('skills') as FormArray
+    return this.employees().at(empIndex).get('skills') as FormArray;
   }
 
   newSkill(): FormGroup {
@@ -71,7 +75,7 @@ export class Tree3Component implements OnInit {
 
   // tslint:disable-next-line:typedef
   removeEmployeeSkill(empIndex: number, skillIndex: number) {
-    console.log(empIndex, skillIndex)
+    console.log(empIndex, skillIndex);
     this.employeeSkills(empIndex).removeAt(skillIndex);
   }
 
@@ -82,18 +86,12 @@ export class Tree3Component implements OnInit {
 
   ngOnInit(): void {
   }
-
-
-}
-
-
-// tslint:disable-next-line:class-name
-export class country {
-  id: string;
-  name: string;
-
-  constructor(id: string, name: string) {
-    this.id = id;
-    this.name = name;
+  // tslint:disable-next-line:typedef
+  _addGroup() {
+    this._groupsFormArray.push(
+      this.fb.control('')
+    );
   }
+
 }
+

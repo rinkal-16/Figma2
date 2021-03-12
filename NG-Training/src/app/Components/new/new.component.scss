@@ -27,11 +27,19 @@ p {
   display: none;
 }
 .div {
+  border-radius: 5px;
   border-top: solid black;
   border-left: solid black;
   border-right: solid black;
   margin: 10px;
-  justify-content: start;
+  justify-content: end;
   align-content: center;
   border-width: thin;
 }
+a[aria-expanded=true] .fa-chevron-right {
+  display: none;
+}
+a[aria-expanded=false] .fa-chevron-down {
+  display: none;
+}
+

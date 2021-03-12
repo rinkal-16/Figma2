@@ -1,3 +1,4 @@
+
 <div class="tree-container">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <div class="card">
@@ -20,19 +21,18 @@
           <form [formGroup]="form">
             <ng-container formGroupName="main">
               <ng-container formArrayName="groups">
-                <ng-container  style="margin-bottom: 10px;" class="example-box" *ngFor="let group of groupsFormArray?.controls; index as i">
-
+                <ng-container style="margin-bottom: 10px;" *ngFor="let group of groupsFormArray?.controls; index as i">
                   <div class="row div">
-                    <h3 class="text-left pl-2" style="width: 200px; margin-top: 20px;"><span style="padding-left: 20px;">Node: {{this.groupsFormArray.value[i].id}}</span>  </h3>
+                    <h3 class="text-left pl-2" style="width: 200px; margin-top: 20px;"><span style="padding-left: 20px;">Node: </span>  </h3>
+                    <button style="margin-top: 15px; margin-bottom: 15px; margin-left: 71%;" class=" btn btn-outline-primary">  <!--(click)=expandRow(i)-->
+                      Open
+                    </button>
+
                   </div>
-<!--                  <div class="row div">-->
-<!--                    <button style="margin-top: 15px; margin-bottom: 15px; margin-left: 20px;" (click)="expandRow(i)" class="btn btn-outline-primary">Open</button>-->
-<!--                    <h3 class="text-left pl-2" style="width: 200px; margin-top: 20px;"><span style="padding-left: 20px;">Node: {{this.groupsFormArray.value[i].id}}</span></h3>-->
-<!--                  </div>-->
-                  <app-action-group (remove)="delete(i)"
-                                    [formControlName]="i"
+                  <app-action-group [formControlName]="i"
                                     [data]="this.groupsFormArray.value[i].id"
-                                    [formLabel]="'Parent Node: '+ this.groupsFormArray.value[i].id">
+                                    [formLabel]="'Parent Node: '+ this.groupsFormArray.value[i].id"
+                  >
                   </app-action-group>
                 </ng-container>
               </ng-container>
@@ -46,9 +46,3 @@
   </div>
 </div>
 <!--<pre>{{ form.value | json }}</pre>-->
-<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-  <div class="example-box" *ngFor="let movie of movies" cdkDrag>
-    <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-    {{movie}}
-  </div>
-</div>

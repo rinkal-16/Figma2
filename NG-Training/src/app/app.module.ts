@@ -21,6 +21,11 @@ import { ActionGroupComponent } from './Components/action-group/action-group.com
 import { Globals } from './Components/globals';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { AllInONeCompComponent } from './Components/all-in-one-comp/all-in-one-comp.component';
+import { IntegralUIModule } from '../../node_modules/@lidorsystems/integralui-web/bin/integralui/integralui.module';
+import { NewComponent } from './Components/new/new.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 @NgModule({
   declarations: [
@@ -34,21 +39,24 @@ import { MatExpansionModule } from '@angular/material/expansion';
     Tree3Component,
     ActionButtonComponent,
     ActionGroupComponent,
-
+    AllInONeCompComponent,
+    NewComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatInputModule,
-        MatCardModule,
-        BrowserAnimationsModule,
-        NgbModule,
-        MatExpansionModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatInputModule,
+    MatCardModule,
+    BrowserAnimationsModule,
+    NgbModule,
+    MatExpansionModule,
+    IntegralUIModule,
+    DragDropModule,
+  ],
   providers: [Globals],
   bootstrap: [AppComponent]
 })

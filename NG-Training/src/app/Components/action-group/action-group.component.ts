@@ -50,7 +50,7 @@ export class ActionGroupComponent
 
   form!: FormGroup;
   expandedIndex: number;
-
+  isExpanded = true;
 
   private onChange: ((
     value: GroupControlComponentData | null | undefined
@@ -66,26 +66,18 @@ export class ActionGroupComponent
   ngOnInit() {
     this.createFormGroup();
     this._setupObservables();
-    console.log('child global---', this.globalId.dataID);
-
-    const arr: any[] = [];
-    const abc = this.globalId;
-    // tslint:disable-next-line:only-arrow-functions typedef
-    Object.keys(abc).map(function(key){
-      // @ts-ignore
-      arr.push({[key]: abc[key]});
-      return arr;
-    });
-    console.log('Array=sss',  this.globalId.dataID);
-
+    console.log('---', this._groupsFormArray.controls);
   }
-
 
   expandRow(index: number): void {
     this.expandedIndex = index === this.expandedIndex ? -1 : index;
+    console.log('++', this.expandedIndex);
+    if (this.expandedIndex === -1) {
+      this.isExpanded = false;
+    } else {
+      this.isExpanded = true;
+    }
   }
-
-  // tslint:disable-next-line:typedef
 
   // tslint:disable-next-line:typedef
   ngOnDestroy() {
@@ -121,11 +113,6 @@ export class ActionGroupComponent
   }
 
   // tslint:disable-next-line:typedef
-  deleteCondition(index: number) {
-    this._conditionsFormArray.removeAt(index);
-  }
-
-  // tslint:disable-next-line:typedef
   deleteGroupFromArray(index: number) {
     this._groupsFormArray.removeAt(index);
   }
@@ -138,25 +125,13 @@ export class ActionGroupComponent
         groups: []
       })
     );
-    // console.log('data: ', this.data);
-    // for (let n = 0; n < this._groupsFormArray.length; n++) {
-    //
-    //   //this.globalId.dataID = this.data + '.' + this._groupsFormArray.value[n].id;
-    //
-    // }
-    // console.log('action-group: ', this.globalId.dataID);
-  }
-
-  get _conditionsFormArray(): FormArray {
-    // @ts-ignore
-    return this.form.get('conditions') as FormArray;
+    console.log('+++', this._groupsFormArray.controls, this._groupsFormArray.length);
   }
 
   get _groupsFormArray(): FormArray {
     // @ts-ignore
     return this.form.get('groups') as FormArray;
   }
-
   // tslint:disable-next-line:typedef
   private createFormGroup() {
     this.form = this.fb.group({
@@ -174,4 +149,5 @@ export class ActionGroupComponent
       }
     });
   }
+
 }

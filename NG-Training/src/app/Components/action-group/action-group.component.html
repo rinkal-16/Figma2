@@ -1,21 +1,21 @@
-<form [formGroup]="form">
-  <app-action-button (remove)="remove.emit()"
-                     (addGroup)="addGroup()">
-  </app-action-button>
-      <ng-container>
-        <mat-accordion>
-          <mat-expansion-panel formArrayName="groups"  *ngFor="let s of _groupsFormArray?.controls; index as i">
-            <mat-expansion-panel-header (click)="expandRow(i)">
-              <mat-panel-title>
-                Node: {{data + '. ' + this._groupsFormArray.value[i].id}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <app-action-group [data]="data + '. ' + this._groupsFormArray.value[i].id"
-                              (remove)="deleteGroupFromArray(i)"
-                              *ngIf="i === expandedIndex"
-                              [formControlName]="i">
-            </app-action-group>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </ng-container>
+<form [formGroup]="form" style="margin-top: -65px; margin-left: 20px;" class="text-right">
+  <ng-container style="margin-left: 100px;">
+    <app-action-button (remove)="remove.emit()"
+                       (addGroup)="addGroup()">
+    </app-action-button>
+    <ng-container formArrayName="groups"  *ngFor="let s of _groupsFormArray?.controls; index as i">
+      <div class="row div"> <!--Add margin-left: 20px; in form tag -->
+        <h3 class="text-left pl-2" style="width: 200px; margin-top: 20px;"><span style="padding-left: 20px;">Node: {{data + '.' + this._groupsFormArray.value[i].id}}</span></h3>
+      </div>
+<!--      <div class="row div">-->
+<!--        <button style="margin-top: 15px; margin-bottom: 15px; margin-left: 20px;" (click)="expandRow(i)" class="btn btn-outline-primary">Open</button>-->
+<!--        <h3 class="text-left pl-2" style="width: 200px; margin-top: 20px;"><span style="padding-left: 20px;">Node: {{data + '.' + this._groupsFormArray.value[i].id}}</span></h3>-->
+<!--      </div>-->
+      <app-action-group [data]="data + '.' + this._groupsFormArray.value[i].id"
+                        (remove)="deleteGroupFromArray(i)"
+                        [formControlName]="i"
+                        [formLabel]="'Child Node: '+ data + '.' + this._groupsFormArray.value[i].id">
+      </app-action-group>
+    </ng-container>
+  </ng-container>
 </form>

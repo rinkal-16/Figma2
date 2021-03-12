@@ -13,8 +13,14 @@ export class ActionButtonComponent implements OnInit {
   @Output()
   addGroup: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor() {
+  expandedIndex: number | undefined;
 
+  constructor() {
+    this.expandedIndex = -1;
+  }
+  expandRow(index: number): void {
+    console.log('sub-tree expandRow: ', index);
+    this.expandedIndex = index === this.expandedIndex ? -1 : index;
   }
 
   ngOnInit(): void {

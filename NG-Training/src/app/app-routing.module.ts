@@ -7,6 +7,8 @@ import { TreeStructureComponent } from './Components/tree-structure/tree-structu
 import { TreeNodeComponent } from './Components/tree-node/tree-node.component';
 import { Tree3Component } from './Components/tree3/tree3.component';
 import { SubTreeComponent } from './Components/sub-tree/sub-tree.component';
+import { AllInONeCompComponent } from './Components/all-in-one-comp/all-in-one-comp.component';
+import { NewComponent } from './Components/new/new.component';
 
 const routes: Routes = [
   { path: 'directive', component: DirectiveTaskComponent },
@@ -15,6 +17,8 @@ const routes: Routes = [
   { path: 'treenode', component: TreeNodeComponent},
   { path: 'tree3', component: Tree3Component},
   { path: 'subtree', component: SubTreeComponent},
+  { path: 'all-one', component: AllInONeCompComponent},
+  { path: 'new', component: NewComponent },
   { path: '', component: AppComponent }
 ];
 
