@@ -25,6 +25,8 @@ import { AllInONeCompComponent } from './Components/all-in-one-comp/all-in-one-c
 import { IntegralUIModule } from '../../node_modules/@lidorsystems/integralui-web/bin/integralui/integralui.module';
 import { NewComponent } from './Components/new/new.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 
 
 @NgModule({
@@ -56,6 +58,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatExpansionModule,
     IntegralUIModule,
     DragDropModule,
+    FormlyMaterialModule,
+    FormlyModule.forRoot(),
   ],
   providers: [Globals],
   bootstrap: [AppComponent]

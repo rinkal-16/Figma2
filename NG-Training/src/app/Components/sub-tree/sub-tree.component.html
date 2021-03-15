@@ -13,28 +13,40 @@
          [attr.aria-expanded]="isExpanded">
       <div class="card-body">
         <div>
-          <section class="top-bar mb-4">
-            <button type="button" class="btn btn-outline-primary"
-                    (click)="_addGroup()">Add node</button>
-          </section>
+
           <form [formGroup]="form">
+            <section class="top-bar mb-4">
+              <button type="button" class="btn btn-outline-primary"
+                      (click)="_addGroup()">Add node</button>
+            </section>
             <ng-container formGroupName="main">
               <ng-container formArrayName="groups">
-                <ng-container  style="margin-bottom: 10px;" class="example-box" *ngFor="let group of groupsFormArray?.controls; index as i">
 
-                  <div class="row div">
-                    <h3 class="text-left pl-2" style="width: 200px; margin-top: 20px;"><span style="padding-left: 20px;">Node: {{this.groupsFormArray.value[i].id}}</span>  </h3>
-                  </div>
+                <div cdkDropList (cdkDropListDropped)="drop($event)">
+                  <div cdkDrag style="margin-bottom: 10px;" *ngFor="let group of groupsFormArray?.controls; index as i" >
+                    <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                    <div class="row div example-list">
+                      <h3 class="text-left pl-2 " style="width: 200px; margin-top: 20px;">
+                        <span style="padding-left: 20px;">Node: {{this.groupsFormArray.value[i].id}}</span>
+<!--                        <button type="button"  class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed"-->
+<!--                                [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">-->
+<!--                          Collapse Toggle-->
+<!--                        </button>-->
+                      </h3>
+                    </div>
 <!--                  <div class="row div">-->
 <!--                    <button style="margin-top: 15px; margin-bottom: 15px; margin-left: 20px;" (click)="expandRow(i)" class="btn btn-outline-primary">Open</button>-->
 <!--                    <h3 class="text-left pl-2" style="width: 200px; margin-top: 20px;"><span style="padding-left: 20px;">Node: {{this.groupsFormArray.value[i].id}}</span></h3>-->
 <!--                  </div>-->
-                  <app-action-group (remove)="delete(i)"
-                                    [formControlName]="i"
-                                    [data]="this.groupsFormArray.value[i].id"
-                                    [formLabel]="'Parent Node: '+ this.groupsFormArray.value[i].id">
-                  </app-action-group>
-                </ng-container>
+                    <app-action-group (remove)="delete(i)"
+                                      [formControlName]="i"
+                                      [data]="this.groupsFormArray.value[i].id"
+                                      [formLabel]="'Parent Node: '+ this.groupsFormArray.value[i].id"
+                                      id="collapseExample" [(ngbCollapse)]="isCollapsed"
+                                      >
+                    </app-action-group>
+                  </div>
+                </div>
               </ng-container>
             </ng-container>
           </form>
@@ -47,8 +59,8 @@
 </div>
 <!--<pre>{{ form.value | json }}</pre>-->
 <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-  <div class="example-box" *ngFor="let movie of movies" cdkDrag>
+  <div class="example-box" *ngFor="let group of this.groupsFormArray.controls; index as i" cdkDrag>
     <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-    {{movie}}
+    {{group.value.id}}
   </div>
 </div>

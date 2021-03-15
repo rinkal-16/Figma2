@@ -12,11 +12,14 @@ import {
   FormBuilder,
   FormArray,
   ControlValueAccessor,
-  NG_VALUE_ACCESSOR
+  NG_VALUE_ACCESSOR, AbstractControl
 } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Globals } from '../globals';
+import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { DragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 
 export interface GroupControlComponentData {
   conjunctor: null;
@@ -37,11 +40,22 @@ export interface GroupControlComponentData {
 })
 export class ActionGroupComponent
   implements ControlValueAccessor, OnDestroy, OnInit {
+
+  constructor(private fb: FormBuilder, public globalId: Globals) {
+    this.expandedIndex = -1;
+  }
+
+  get _groupsFormArray(): FormArray {
+    // @ts-ignore
+    return this.form.get('groups') as FormArray;
+  }
   @Input()
   formLabel: string | number = 'Group';
 
   @Output()
   remove: EventEmitter<void> = new EventEmitter<void>();
+  @Output()
+  expandRows: EventEmitter<void> = new EventEmitter<void>();
 
   @Input() data: any;
   // tslint:disable-next-line:no-output-rename
@@ -49,7 +63,7 @@ export class ActionGroupComponent
   @Output() public getUserData = new EventEmitter<string>();
 
   form!: FormGroup;
-  expandedIndex: number;
+  expandedIndex: number | undefined;
   isExpanded = true;
 
   private onChange: ((
@@ -58,24 +72,24 @@ export class ActionGroupComponent
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private fb: FormBuilder, public globalId: Globals) {
-    this.expandedIndex = -1;
-  }
+  // tslint:disable-next-line:adjacent-overload-signatures typedef
+  doneList: any;
 
   // tslint:disable-next-line:typedef
   ngOnInit() {
     this.createFormGroup();
     this._setupObservables();
-    console.log('---', this._groupsFormArray.controls);
   }
 
-  expandRow(index: number): void {
+
+  expandRow(index?: number): void {
+    console.log('index: ', index);
     this.expandedIndex = index === this.expandedIndex ? -1 : index;
     console.log('++', this.expandedIndex);
     if (this.expandedIndex === -1) {
-      this.isExpanded = false;
-    } else {
       this.isExpanded = true;
+    } else {
+      this.isExpanded = false;
     }
   }
 
@@ -125,13 +139,25 @@ export class ActionGroupComponent
         groups: []
       })
     );
-    console.log('+++', this._groupsFormArray.controls, this._groupsFormArray.length);
   }
 
-  get _groupsFormArray(): FormArray {
-    // @ts-ignore
-    return this.form.get('groups') as FormArray;
-  }
+  // tslint:disable-next-line:typedef
+  // drop(event: CdkDragDrop<string[]>) {
+  //   console.log('drop :', event, event.previousContainer, event.currentIndex);
+  //   // moveItemInArray(this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
+  //   console.log(event.previousContainer, event.container);
+  //   if (event.previousContainer === event.container) {
+  //     console.log(this._groupsFormArray.controls);
+  //     moveItemInArray(this._groupsFormArray.controls, event.previousIndex, event.currentIndex);
+  //   } else {
+  //     transferArrayItem(
+  //       event.previousContainer.data,
+  //       event.container.data,
+  //       event.previousIndex,
+  //       event.currentIndex
+  //     );
+  //   }
+  // }
   // tslint:disable-next-line:typedef
   private createFormGroup() {
     this.form = this.fb.group({
@@ -149,5 +175,27 @@ export class ActionGroupComponent
       }
     });
   }
+  // tslint:disable-next-line:typedef
+  // drop(event: CdkDragDrop<string[]>) {
+  //   if (event.previousContainer === event.container) {
+  //     console.log(this._groupsFormArray.controls);
+  //     moveItemInArray(this._groupsFormArray.controls, event.previousIndex, event.currentIndex);
+  //   }
+  //   else {
+  //     // @ts-ignore
+  //     transferArrayItem(
+  //       this._groupsFormArray.controls,
+  //       event.previousIndex,
+  //       event.currentIndex
+  //     );
+  //   }
+  // }
 
+  // tslint:disable-next-line:typedef
+  drop(event: CdkDragDrop<string[]>) {
+    // moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
+    const oldest = this._groupsFormArray.controls[event.previousIndex];
+    this._groupsFormArray.controls[event.previousIndex] = this._groupsFormArray.controls[event.currentIndex];
+    this._groupsFormArray.controls[event.currentIndex] = oldest;
+  }
 }

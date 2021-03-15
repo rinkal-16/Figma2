@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-action-button',
@@ -13,17 +13,26 @@ export class ActionButtonComponent implements OnInit {
   @Output()
   addGroup: EventEmitter<void> = new EventEmitter<void>();
 
-  expandedIndex: number | undefined;
+  @Output()
+  expandRows: EventEmitter<void> = new EventEmitter<void>();
+
+  expandedIndex!: number;
+
+  @Input() storeIndex!: string;
 
   constructor() {
     this.expandedIndex = -1;
   }
-  expandRow(index: number): void {
-    console.log('sub-tree expandRow: ', index);
-    this.expandedIndex = index === this.expandedIndex ? -1 : index;
-  }
+  // expandRow(index?: number): void {
+  //   console.log('sub-tree expandRow: ', this.storeIndex);
+  //   // @ts-ignore
+  //   this.expandedIndex = this.storeIndex === this.expandedIndex ? -1 : this.storeIndex;
+  //   console.log(this.expandedIndex);
+  // }
 
   ngOnInit(): void {
+  }
+  ngOnChange(): void {
   }
 
 }

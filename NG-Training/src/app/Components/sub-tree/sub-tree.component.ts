@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray } from '@angular/forms';
-import { Globals } from '../globals';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {Globals} from '../globals';
+import {CdkDragDrop, DragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-sub-tree',
@@ -11,35 +10,38 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 })
 export class SubTreeComponent implements OnInit {
 
-  form!: FormGroup;
-  form2!: FormGroup;
-  isExpanded = true;
-  expandedIndex: number;
-  @Input() data2: any;
-  // tslint:disable-next-line:no-output-rename
-  @Output('parentId') parentId: any;
-
-  // Nesting start
-  @Output()
-  remove: EventEmitter<void> = new EventEmitter<void>();
-
-  movies = [
-    'Episode I - The Phantom Menace',
-    'Episode II - Attack of the Clones',
-    'Episode III - Revenge of the Sith',
-    'Episode IV - A New Hope',
-    'Episode V - The Empire Strikes Back',
-    'Episode VI - Return of the Jedi',
-    'Episode VII - The Force Awakens',
-    'Episode VIII - The Last Jedi',
-    'Episode IX – The Rise of Skywalker'
-  ];
-
-  constructor(private fb: FormBuilder, public globalId: Globals) {
+  constructor(private fb: FormBuilder, public globalId: Globals, private dragDrop: DragDrop) {
     this.globalId.dataID = 1;
     this.createForm();
     this.expandedIndex = -1;
   }
+    get groupsFormArray(): FormArray {
+      // @ts-ignore
+      return this.form.get('main').get('groups') as FormArray;
+    }
+
+  // @ViewChild('formly', { read: ElementRef }) formlyForm!: ElementRef<HTMLElement>;
+  // model: any = {};
+  // options: FormlyFormOptions = {};
+  // fields = this.groupsFormArray.controls;
+  form!: FormGroup;
+  form2!: FormGroup;
+  isExpanded = true;
+  expandedIndex: number;
+  public isCollapsed = false;
+
+  @Input() data2: any;
+  // tslint:disable-next-line:no-output-rename
+  @Output('parentId') parentId: any;
+  // Nesting start
+  @Output()
+  remove: EventEmitter<void> = new EventEmitter<void>();
+  // storeIndex!: any;
+  // tslint:disable-next-line:no-output-rename
+  @Output('storeIndex') storeIndex: any;
+    // tslint:disable-next-line:typedef
+    nextElementSibling: any;
+    classList: any;
   // tslint:disable-next-line:use-lifecycle-interface
     ngOnDestroy(): void {
         throw new Error('Method not implemented.');
@@ -55,11 +57,29 @@ export class SubTreeComponent implements OnInit {
         throw new Error('Method not implemented.');
     }
 
-  // tslint:disable-next-line:typedef
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
-  }
+    // tslint:disable-next-line:typedef
+    drop(event: CdkDragDrop<string[]>) {
+      // moveItemInArray(this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
+      if (event.previousContainer === event.container) {
+        moveItemInArray(this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
+      }
+      else {
+        // @ts-ignore
+        transferArrayItem(
+          this.groupsFormArray.controls,
+          event.previousIndex,
+          event.currentIndex
+        );
+      }
+    }
 
+  // tslint:disable-next-line:typedef
+  // drop(event: CdkDragDrop<any>) {
+  //   this.groupsFormArray.controls[event.previousContainer.data.index] = {...event.container.data.item};
+  //   this.groupsFormArray.controls[event.container.data.index] = {...event.previousContainer.data.item};
+  //   event.currentIndex = 0;
+  //   console.log(event.previousContainer.data, '-->', event.container.data);
+  // }
 
 
     expandRow(index: number): void {
@@ -78,24 +98,19 @@ export class SubTreeComponent implements OnInit {
           groups: []
         })
       );
-      for (let n = 0; n < this.groupsFormArray.length; n++) {
-        this.globalId.dataID = this.groupsFormArray.value[n].id;
-      }
+      this.storeIndex = this.groupsFormArray.controls.indexOf(this.fb.control(this.groupsFormArray.controls.values));
     }
-  // tslint:disable-next-line:typedef
-  addNew() {
-    console.log('+ called');
-  }
+
+    // tslint:disable-next-line:typedef
+    addNew() {
+      console.log('+ called');
+    }
     // tslint:disable-next-line:typedef
     delete(index: number) {
       console.log('delete: ', index);
       this.groupsFormArray.removeAt(index);
     }
-    get groupsFormArray(): FormArray {
-      // @ts-ignore
-      return this.form.get('main').get('groups') as FormArray;
-    }
-    // tslint:disable-next-line:typedef
+  // tslint:disable-next-line:typedef
     private createForm() {
       this.form = this.fb.group({
         id: 1,
@@ -108,7 +123,7 @@ export class SubTreeComponent implements OnInit {
 
   ngOnInit(): void {
     this.globalId.dataID = 1;
-    console.log('+++', this.groupsFormArray?.controls);
+    const coll = document.getElementsByClassName('collapsible');
   }
 
 }
