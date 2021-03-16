@@ -19,6 +19,7 @@ export class ActionButtonComponent implements OnInit {
   expandedIndex!: number;
 
   @Input() storeIndex!: string;
+  @Input() showMinus!: boolean;
 
   constructor() {
     this.expandedIndex = -1;
@@ -31,8 +32,7 @@ export class ActionButtonComponent implements OnInit {
   // }
 
   ngOnInit(): void {
-  }
-  ngOnChange(): void {
+    console.log(this.showMinus);
   }
 
 }

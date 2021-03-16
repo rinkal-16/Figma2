@@ -1,25 +1,10 @@
-import {
-  Component,
-  Input,
-  forwardRef,
-  Output,
-  EventEmitter,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
-import {
-  FormGroup,
-  FormBuilder,
-  FormArray,
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR, AbstractControl
-} from '@angular/forms';
+import {Component, Input, forwardRef, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
+import {FormGroup, FormBuilder, FormArray, ControlValueAccessor, NG_VALUE_ACCESSOR, } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Globals } from '../globals';
-import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
-import { DragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 export interface GroupControlComponentData {
   conjunctor: null;
@@ -38,8 +23,7 @@ export interface GroupControlComponentData {
     }
   ]
 })
-export class ActionGroupComponent
-  implements ControlValueAccessor, OnDestroy, OnInit {
+export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, OnInit {
 
   constructor(private fb: FormBuilder, public globalId: Globals) {
     this.expandedIndex = -1;
@@ -47,24 +31,27 @@ export class ActionGroupComponent
 
   get _groupsFormArray(): FormArray {
     // @ts-ignore
-    return this.form.get('groups') as FormArray;
+    return this.formChild.get('groups') as FormArray;
   }
+
   @Input()
   formLabel: string | number = 'Group';
-
   @Output()
   remove: EventEmitter<void> = new EventEmitter<void>();
   @Output()
   expandRows: EventEmitter<void> = new EventEmitter<void>();
-
   @Input() data: any;
   // tslint:disable-next-line:no-output-rename
   @Output('parentId') parentId: any;
   @Output() public getUserData = new EventEmitter<string>();
 
-  form!: FormGroup;
+  formChild!: FormGroup;
   expandedIndex: number | undefined;
   isExpanded = true;
+  public isCollapsed = false;
+  buttonTitle = 'Hide';
+  visible = true;
+
 
   private onChange: ((
     value: GroupControlComponentData | null | undefined
@@ -81,16 +68,14 @@ export class ActionGroupComponent
     this._setupObservables();
   }
 
+  expand(): void {
+    this.isExpanded = !this.isExpanded;
+  }
 
-  expandRow(index?: number): void {
-    console.log('index: ', index);
-    this.expandedIndex = index === this.expandedIndex ? -1 : index;
-    console.log('++', this.expandedIndex);
-    if (this.expandedIndex === -1) {
-      this.isExpanded = true;
-    } else {
-      this.isExpanded = false;
-    }
+  // tslint:disable-next-line:typedef
+  showhideutility() {
+    this.visible = this.visible ? false : true;
+    this.buttonTitle = this.visible ? 'Show' : 'Hide';
   }
 
   // tslint:disable-next-line:typedef
@@ -105,9 +90,8 @@ export class ActionGroupComponent
     if (!value) {
       return;
     }
-
     // @ts-ignore
-    this.form.patchValue(value);
+    this.formChild.patchValue(value);
   }
 
   registerOnChange(
@@ -142,25 +126,8 @@ export class ActionGroupComponent
   }
 
   // tslint:disable-next-line:typedef
-  // drop(event: CdkDragDrop<string[]>) {
-  //   console.log('drop :', event, event.previousContainer, event.currentIndex);
-  //   // moveItemInArray(this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
-  //   console.log(event.previousContainer, event.container);
-  //   if (event.previousContainer === event.container) {
-  //     console.log(this._groupsFormArray.controls);
-  //     moveItemInArray(this._groupsFormArray.controls, event.previousIndex, event.currentIndex);
-  //   } else {
-  //     transferArrayItem(
-  //       event.previousContainer.data,
-  //       event.container.data,
-  //       event.previousIndex,
-  //       event.currentIndex
-  //     );
-  //   }
-  // }
-  // tslint:disable-next-line:typedef
   private createFormGroup() {
-    this.form = this.fb.group({
+    this.formChild = this.fb.group({
       id: 1,
       groups: this.fb.array([])
     });
@@ -169,33 +136,16 @@ export class ActionGroupComponent
   // tslint:disable-next-line:typedef
   private _setupObservables() {
     // @ts-ignore
-    this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    this.formChild.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
       if (this.onChange) {
         this.onChange(value);
       }
     });
   }
-  // tslint:disable-next-line:typedef
-  // drop(event: CdkDragDrop<string[]>) {
-  //   if (event.previousContainer === event.container) {
-  //     console.log(this._groupsFormArray.controls);
-  //     moveItemInArray(this._groupsFormArray.controls, event.previousIndex, event.currentIndex);
-  //   }
-  //   else {
-  //     // @ts-ignore
-  //     transferArrayItem(
-  //       this._groupsFormArray.controls,
-  //       event.previousIndex,
-  //       event.currentIndex
-  //     );
-  //   }
-  // }
 
   // tslint:disable-next-line:typedef
   drop(event: CdkDragDrop<string[]>) {
-    // moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
-    const oldest = this._groupsFormArray.controls[event.previousIndex];
-    this._groupsFormArray.controls[event.previousIndex] = this._groupsFormArray.controls[event.currentIndex];
-    this._groupsFormArray.controls[event.currentIndex] = oldest;
+    console.log('event: ', event.previousIndex, event.currentIndex);
+    moveItemInArray(this._groupsFormArray.controls, event.previousIndex, event.currentIndex);
   }
 }

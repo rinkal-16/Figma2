@@ -28,7 +28,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 
-
 @NgModule({
   declarations: [
     AppComponent,
