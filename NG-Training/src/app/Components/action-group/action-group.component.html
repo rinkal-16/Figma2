@@ -1,40 +1,38 @@
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-<form [formGroup]="formChild" style="margin-top: -65px; margin-left: 20px;" class="text-right">
-  <div cdkDropList (cdkDropListDropped)="drop($event)">
-        <ng-container style="margin-left: 100px;">
-          <app-action-button (remove)="remove.emit()"
+<form [formGroup]="formChild" class="text-right">
+  <div cdkDropList (cdkDropListDropped)="drop($event)"> <!--cdkDropList (cdkDropListDropped)="drop($event)"-->
+    <ng-container style="margin-left: 100px;">
+      <app-action-button (remove)="remove.emit()"
                          (addGroup)="addGroup()">
-          </app-action-button>
-          <div cdkDrag style="margin-bottom: 10px;" *ngFor="let group of _groupsFormArray?.controls; index as subIndex">
-            <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-            <ng-container formArrayName="groups" id="accordion" class="custom-accordion">
-                    <div  id="headingOne" class="row div example-list">
-                      <h3 class="text-left pl-2" style="width: 400px; margin-top: 20px;">
-                        <button class="btn btn-link "
-                                data-toggle="collapse"
-                                [attr.data-target]="'#collapse'+subIndex"
-                                aria-expanded="true"
-                                aria-controls="collapseOne" (click)="showhideutility()"> {{buttonTitle}}
-                          <i *ngIf="!visible" class="fa fa-chevron-right pull-right"></i>
-                          <i *ngIf="visible" class="fa fa-chevron-down pull-right"></i>
-                        </button>
-                        <span style="padding-left: 20px; font-weight: bold;">Node: {{data + '.' + group.value.id}}</span>
-                      </h3>
-                    </div>
-                    <div [attr.id]="'collapse'+subIndex" class="collapse show"
-                         aria-labelledby="headingOne"
-                         data-parent="#accordion">
-                      <div>
-                        <app-action-group [data]="data + '.' + this._groupsFormArray.value[subIndex].id"
-                                          (remove)="deleteGroupFromArray(subIndex)"
-                                          [formControlName]="subIndex">
-                        </app-action-group>
-                      </div>
-                    </div>
-            </ng-container>
+      </app-action-button>
+      <div cdkDrag style="margin-bottom: 10px;" *ngFor="let group of _groupsFormArray?.controls; index as subIndex">
+        <!--cdkDrag-->
+        <!--        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>-->
+        <ng-container formArrayName="groups" id="accordion" class="custom-accordion">
+          <div id="collapseId" class="row div example-list">
+            <h3 class="text-left pl-2">
+              <button class="btn btn-link"
+                      data-toggle="collapse"
+                      [attr.data-target]="'#collapse'+subIndex"
+                      aria-expanded="true"
+                      aria-controls="collapseOne" (click)="showhide()"> {{buttonTitle}}
+                <i *ngIf="!visible" class="fa fa-chevron-right pull-right"></i>
+                <i *ngIf="visible" class="fa fa-chevron-down pull-right"></i>
+              </button>
+
+              <span>Nodes: {{data + '.' + group.value.id}}</span>
+            </h3>
+          </div>
+          <div [attr.id]="'collapse'+subIndex" class="collapse show" aria-labelledby="collapseId"
+               data-parent="#accordion">
+            <div>
+              <app-action-group [data]="data + '.' + group.value.id"
+                                (remove)="deleteGroupFromArray(subIndex)"
+                                [formControlName]="subIndex">
+              </app-action-group>
+            </div>
           </div>
         </ng-container>
+      </div>
+    </ng-container>
   </div>
 </form>

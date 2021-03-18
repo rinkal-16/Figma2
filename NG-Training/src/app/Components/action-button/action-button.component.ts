@@ -24,15 +24,8 @@ export class ActionButtonComponent implements OnInit {
   constructor() {
     this.expandedIndex = -1;
   }
-  // expandRow(index?: number): void {
-  //   console.log('sub-tree expandRow: ', this.storeIndex);
-  //   // @ts-ignore
-  //   this.expandedIndex = this.storeIndex === this.expandedIndex ? -1 : this.storeIndex;
-  //   console.log(this.expandedIndex);
-  // }
 
   ngOnInit(): void {
-    console.log(this.showMinus);
   }
 
 }

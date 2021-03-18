@@ -34,6 +34,13 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
     return this.formChild.get('groups') as FormArray;
   }
 
+  formChild!: FormGroup;
+  expandedIndex: number | undefined;
+  isExpanded = true;
+  public isCollapsed = false;
+  buttonTitle = 'Hide';
+  visible = true;
+
   @Input()
   formLabel: string | number = 'Group';
   @Output()
@@ -44,14 +51,6 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
   // tslint:disable-next-line:no-output-rename
   @Output('parentId') parentId: any;
   @Output() public getUserData = new EventEmitter<string>();
-
-  formChild!: FormGroup;
-  expandedIndex: number | undefined;
-  isExpanded = true;
-  public isCollapsed = false;
-  buttonTitle = 'Hide';
-  visible = true;
-
 
   private onChange: ((
     value: GroupControlComponentData | null | undefined
@@ -73,7 +72,7 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
   }
 
   // tslint:disable-next-line:typedef
-  showhideutility() {
+  showhide() {
     this.visible = this.visible ? false : true;
     this.buttonTitle = this.visible ? 'Show' : 'Hide';
   }
@@ -145,7 +144,6 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
 
   // tslint:disable-next-line:typedef
   drop(event: CdkDragDrop<string[]>) {
-    console.log('event: ', event.previousIndex, event.currentIndex);
     moveItemInArray(this._groupsFormArray.controls, event.previousIndex, event.currentIndex);
   }
 }

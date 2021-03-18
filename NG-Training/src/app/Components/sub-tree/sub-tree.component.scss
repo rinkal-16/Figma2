@@ -42,9 +42,6 @@ a[aria-expanded=false] .fa-chevron-down {
   display: none;
 }
 
-
-
-
 .example-list {
   width: 100%;
   max-width: 100%;
@@ -96,4 +93,11 @@ a[aria-expanded=false] .fa-chevron-down {
   min-height: 60px;
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
-
+h3 {
+  width: 200px;
+  margin-top: 20px;
+}
+.spanNode {
+  padding-left: 20px;
+  font-weight: bold;
+}

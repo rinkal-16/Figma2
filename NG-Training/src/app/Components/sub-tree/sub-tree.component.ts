@@ -28,20 +28,21 @@ export class SubTreeComponent implements OnInit {
     buttonTitle = 'Hide';
     visible = true;
     @Input() title = 'True';
-    
     @Input() data2: any;
     // tslint:disable-next-line:no-output-rename
     @Output('parentId') parentId: any;
-    // Nesting start
     @Output()
     remove: EventEmitter<void> = new EventEmitter<void>();
-    // storeIndex!: any;
     // tslint:disable-next-line:no-output-rename
     @Output('storeIndex') storeIndex: any;
     // tslint:disable-next-line:typedef
     classList: any;
     // tslint:disable-next-line:typedef
     isOpen2: any;
+
+    ngOnInit(): void {
+      this.globalId.dataID = 1;
+    }
     // tslint:disable-next-line:use-lifecycle-interface
     ngOnDestroy(): void {
         throw new Error('Method not implemented.');
@@ -57,30 +58,44 @@ export class SubTreeComponent implements OnInit {
     }
     // tslint:disable-next-line:typedef
     drop(event: CdkDragDrop<string[]>) {
-      console.log('event: ', event.previousIndex, event.currentIndex);
+      console.log('parent-event: ', event);
       moveItemInArray(this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
     }
     expand(): void {
       this.isExpanded = !this.isExpanded;
     }
     // tslint:disable-next-line:typedef
-    showhideutility() {
+    showhide() {
         this.visible = this.visible ? false : true;
         this.buttonTitle = this.visible ? 'Show' : 'Hide';
     }
     // tslint:disable-next-line:typedef
     _addGroup() {
-      this.groupsFormArray.push(
-        this.fb.control({
-          id: this.groupsFormArray.length + 1,
-          groups: []
-        })
-      );
-      this.storeIndex = this.groupsFormArray.controls.indexOf(this.fb.control(this.groupsFormArray.controls.values));
+      if (this.formParent.value.id === 1 ){
+        this.groupsFormArray.push(
+          this.fb.control({
+            id: this.groupsFormArray.length + 1,
+            groups: []
+          })
+        );
+      }
+      else {
+        this.groupsFormArray.controls.map((item) => {
+         if (item.value.id === item.value.id) {
+          }
+          else {
+            this.groupsFormArray.push(
+              this.fb.control({
+                id: this.groupsFormArray.length + 1,
+                groups: []
+              })
+            );
+          }
+        });
+      }
     }
     // tslint:disable-next-line:typedef
     delete(index: number) {
-      console.log('delete: ', index);
       this.groupsFormArray.removeAt(index);
     }
     // tslint:disable-next-line:typedef
@@ -92,9 +107,5 @@ export class SubTreeComponent implements OnInit {
         })
       });
     }
-
-  ngOnInit(): void {
-    this.globalId.dataID = 1;
-  }
 
 }
