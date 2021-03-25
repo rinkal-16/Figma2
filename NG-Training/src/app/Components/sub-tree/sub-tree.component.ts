@@ -71,7 +71,9 @@ export class SubTreeComponent implements OnInit {
     }
     // tslint:disable-next-line:typedef
     _addGroup() {
-      if (this.formParent.value.id === 1 ){
+      console.log(this.formParent.value.id);
+      if (this.formParent.value.id === '') {
+        console.log('if push');
         this.groupsFormArray.push(
           this.fb.control({
             id: this.groupsFormArray.length + 1,
@@ -80,17 +82,19 @@ export class SubTreeComponent implements OnInit {
         );
       }
       else {
+        console.log('else push');
         this.groupsFormArray.controls.map((item) => {
-         if (item.value.id === item.value.id) {
-          }
-          else {
-            this.groupsFormArray.push(
+         // if (item.value.id === item.value.id) {
+         //  }
+         // else {
+          console.log(item);
+          this.groupsFormArray.push(
               this.fb.control({
                 id: this.groupsFormArray.length + 1,
                 groups: []
               })
             );
-          }
+         // }
         });
       }
     }
@@ -101,7 +105,7 @@ export class SubTreeComponent implements OnInit {
     // tslint:disable-next-line:typedef
     private createForm() {
       this.formParent = this.fb.group({
-        id: 1,
+        id: '',
         main: this.fb.group({
           groups: this.fb.array([])
         })

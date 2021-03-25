@@ -12,11 +12,7 @@ export class AppComponent implements OnInit {
   }
 
  ngOnInit(): void {
-   console.log('');
+
  }
 
-  btnClick(): void {
-    console.log('Clicked');
-    this.route.navigate(['/directive']);
-  }
 }

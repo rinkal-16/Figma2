@@ -122,7 +122,12 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
         groups: []
       })
     );
+    // tslint:disable-next-line:no-shadowed-variable
+    this._groupsFormArray.controls.map((id: any) => {
+      console.log(id.value.id);
+    });
   }
+
 
   // tslint:disable-next-line:typedef
   private createFormGroup() {
