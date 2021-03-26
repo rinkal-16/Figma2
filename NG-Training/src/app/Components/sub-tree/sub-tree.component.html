@@ -1,5 +1,6 @@
 <div class="tree-container">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"  crossorigin="anonymous">
   <div class="card">
     <div class="card-header panel-heading">
       <span class="left-label" style="font-size: 18px; font-weight: bold; ">Tree structure</span>
@@ -20,8 +21,8 @@
             </section>
             <ng-container formGroupName="main">
               <ng-container formArrayName="groups" cdkDropListGroup>
-                      <div cdkDropList #list="cdkDropList" (cdkDropListDropped)="drop($event)">
-                        <div cdkDrag style="margin-bottom: 10px;" *ngFor="let group of groupsFormArray?.controls; index as i" >
+                      <div cdkDropList (cdkDropListDropped)="drop($event)">
+                        <div cdkDrag style="margin-bottom: 10px;" *ngFor="let group of groupsFormArray?.controls; index as i">
                           <div  class="example-custom-placeholder" *cdkDragPlaceholder></div>
                           <div id="accordion" class="custom-accordion">
                             <div id="collapseId" class="row div example-list">
@@ -30,7 +31,7 @@
                                         data-toggle="collapse"
                                         [attr.data-target]="'#collapse'+group.value.id"
                                         aria-expanded="true"
-                                        aria-controls="collapseOne" (click)="showhide()"> {{buttonTitle}}
+                                        aria-controls="collapseOne" (click)="showhide()">
                                   <i *ngIf="!visible" class="fa fa-chevron-right pull-right"></i>
                                   <i *ngIf="visible" class="fa fa-chevron-down pull-right"></i>
                                 </button>

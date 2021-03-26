@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {Globals} from '../globals';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+
 
 @Component({
   selector: 'app-sub-tree',
@@ -15,6 +16,7 @@ export class SubTreeComponent implements OnInit {
       this.globalId.dataID = 1;
       this.createForm();
       this.expandedIndex = -1;
+      // @ts-ignore
     }
     get groupsFormArray(): FormArray {
       // @ts-ignore
@@ -39,9 +41,18 @@ export class SubTreeComponent implements OnInit {
     classList: any;
     // tslint:disable-next-line:typedef
     isOpen2: any;
+    totalData: any;
+    getId: any;
+    connectedTo = [];
 
     ngOnInit(): void {
       this.globalId.dataID = 1;
+      for (const week of this.groupsFormArray.controls) {
+        // @ts-ignore
+        this.connectedTo.push(week.id);
+        // @ts-ignore
+        console.log(this.connectedTo.push(week.id));
+      }
     }
     // tslint:disable-next-line:use-lifecycle-interface
     ngOnDestroy(): void {
@@ -56,11 +67,7 @@ export class SubTreeComponent implements OnInit {
     registerOnTouched(fn: any): void {
         throw new Error('Method not implemented.');
     }
-    // tslint:disable-next-line:typedef
-    drop(event: CdkDragDrop<string[]>) {
-      console.log('parent-event: ', event);
-      moveItemInArray(this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
-    }
+
     expand(): void {
       this.isExpanded = !this.isExpanded;
     }
@@ -71,9 +78,7 @@ export class SubTreeComponent implements OnInit {
     }
     // tslint:disable-next-line:typedef
     _addGroup() {
-      console.log(this.formParent.value.id);
       if (this.formParent.value.id === '') {
-        console.log('if push');
         this.groupsFormArray.push(
           this.fb.control({
             id: this.groupsFormArray.length + 1,
@@ -82,22 +87,49 @@ export class SubTreeComponent implements OnInit {
         );
       }
       else {
-        console.log('else push');
         this.groupsFormArray.controls.map((item) => {
-         // if (item.value.id === item.value.id) {
-         //  }
-         // else {
-          console.log(item);
           this.groupsFormArray.push(
               this.fb.control({
                 id: this.groupsFormArray.length + 1,
                 groups: []
               })
             );
-         // }
         });
       }
+      this.getId = this.groupsFormArray.controls.map((i: any) => {
+        // console.log(i.value.id);
+        return i.value.id;
+      });
+
+      this.totalData = this.formParent.value;
+      // tslint:disable-next-line:prefer-for-of
+      for (let k = 0; k < this.formParent.value.length; k++) {
+        console.log(this.totalData.main.groups[k].id);
+      }
+
     }
+  // tslint:disable-next-line:typedef
+  getArrayDepth(ry: any){
+    // number of levels: how deep is the array
+    let levels = 1;
+    // previous length
+    // tslint:disable-next-line:variable-name
+    let prev_length = 1;
+    // current length
+    // tslint:disable-next-line:variable-name
+    let curr_length = ry.length;
+    // if the resulting array is longer than the previous one  add a new level
+    while (curr_length > prev_length){
+      ry = ry.flat();
+      prev_length = curr_length;
+      curr_length = ry.length;
+      levels ++;
+    }
+    return levels;
+  }
+
+
+
     // tslint:disable-next-line:typedef
     delete(index: number) {
       this.groupsFormArray.removeAt(index);
@@ -110,6 +142,20 @@ export class SubTreeComponent implements OnInit {
           groups: this.fb.array([])
         })
       });
+    }
+    // tslint:disable-next-line:typedef
+    drop(event: CdkDragDrop<string[]>) {
+      // console.log('event: ', event);
+      // console.log('distance: ', event.distance);
+      // console.log('drop last position', event.item._dragRef._pointerPositionAtLastDirectionChange);
+      moveItemInArray(this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
+      // if (event.previousContainer !== event.container) {
+      //   console.log('if called');
+      //   transferArrayItem(event.previousContainer.data,
+      //     event.container.data,
+      //     event.previousIndex,
+      //     event.currentIndex);
+      // }
     }
 
 }

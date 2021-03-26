@@ -1,10 +1,20 @@
-import {Component, Input, forwardRef, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, FormArray, ControlValueAccessor, NG_VALUE_ACCESSOR, } from '@angular/forms';
-import { Subject } from 'rxjs';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation
+} from '@angular/core';
+import {ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, } from '@angular/forms';
+import {Subject} from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Globals } from '../globals';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { moveItemInArray } from '@angular/cdk/drag-drop';
+import {Globals} from '../globals';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+
 
 export interface GroupControlComponentData {
   conjunctor: null;
@@ -40,6 +50,10 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
   public isCollapsed = false;
   buttonTitle = 'Hide';
   visible = true;
+  state = '';
+  position = '';
+  getId: any;
+  connectedTo = [];
 
   @Input()
   formLabel: string | number = 'Group';
@@ -65,6 +79,12 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
   ngOnInit() {
     this.createFormGroup();
     this._setupObservables();
+    for (const week of this._groupsFormArray.controls) {
+      // @ts-ignore
+      this.connectedTo.push(week.id);
+      // @ts-ignore
+      console.log(this.connectedTo.push(week.id));
+    }
   }
 
   expand(): void {
@@ -93,9 +113,7 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
     this.formChild.patchValue(value);
   }
 
-  registerOnChange(
-    fn: (value: GroupControlComponentData | null | undefined) => void
-  ): void {
+  registerOnChange(fn: (value: GroupControlComponentData | null | undefined) => void): void {
     this.onChange = fn;
   }
 
@@ -122,10 +140,31 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
         groups: []
       })
     );
-    // tslint:disable-next-line:no-shadowed-variable
-    this._groupsFormArray.controls.map((id: any) => {
-      console.log(id.value.id);
+
+    this.getId = this._groupsFormArray.controls.map((i: any) => {
+      console.log(i.value.id);
+      return i.value.id;
     });
+    console.log(this.getArrayDepth(this._groupsFormArray.controls));
+  }
+  // tslint:disable-next-line:typedef
+  getArrayDepth(ry: any) {
+    // number of levels: how deep is the array
+    let levels = 1;
+    // previous length
+    // tslint:disable-next-line:variable-name
+    let prev_length = 1;
+    // current length
+    // tslint:disable-next-line:variable-name
+    let curr_length = ry.length;
+    // if the resulting array is longer than the previous one  add a new level
+    while (curr_length > prev_length){
+      ry = ry.flat();
+      prev_length = curr_length;
+      curr_length = ry.length;
+      levels ++;
+    }
+    return levels;
   }
 
 
@@ -149,6 +188,17 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
 
   // tslint:disable-next-line:typedef
   drop(event: CdkDragDrop<string[]>) {
+    // console.log('event: ', event);
+    // console.log('drop last position', event.item._dragRef._pointerPositionAtLastDirectionChange);
     moveItemInArray(this._groupsFormArray.controls, event.previousIndex, event.currentIndex);
+    // if (event.previousContainer !== event.container) {
+    //   console.log('if called');
+    //   transferArrayItem(event.previousContainer.data,
+    //     event.container.data,
+    //     event.previousIndex,
+    //     event.currentIndex);
+    // }
   }
+
+
 }

@@ -4,7 +4,8 @@
       <app-action-button (remove)="remove.emit()"
                          (addGroup)="addGroup()">
       </app-action-button>
-      <div cdkDrag style="margin-bottom: 10px;" *ngFor="let group of _groupsFormArray?.controls; index as subIndex">
+      <div cdkDrag style="margin-bottom: 10px;" *ngFor="let group of _groupsFormArray?.controls; index as subIndex"
+      >
         <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
         <ng-container formArrayName="groups" id="accordion" class="custom-accordion">
           <div id="collapseId" class="row div example-list">
@@ -13,9 +14,9 @@
                       data-toggle="collapse"
                       [attr.data-target]="'#collapse'+subIndex"
                       aria-expanded="true"
-                      aria-controls="collapseOne" (click)="showhide()"> {{buttonTitle}}
-                <i *ngIf="!visible" class="fa fa-chevron-right pull-right"></i>
-                <i *ngIf="visible" class="fa fa-chevron-down pull-right"></i>
+                      aria-controls="collapseOne" (click)="showhide()">
+                <i *ngIf="!visible" class="fa fa-chevron-right pull-right ml-n1"></i>
+                <i *ngIf="visible" class="fa fa-chevron-down pull-right ml-n1"></i>
               </button>
               <span>Nodes: {{data + '.' + group.value.id}}</span>
             </h3>
@@ -34,3 +35,5 @@
     </ng-container>
   </div>
 </form>
+
+
