@@ -1,5 +1,5 @@
 <form [formGroup]="formChild" class="text-right">
-  <div cdkDropList (cdkDropListDropped)="drop($event)">
+  <div cdkDropList (cdkDropListDropped)="drop($event)"  #listOne="cdkDropList">
     <ng-container style="margin-left: 100px;">
       <app-action-button (remove)="remove.emit()"
                          (addGroup)="addGroup()">
@@ -26,7 +26,7 @@
             <div>
               <app-action-group [data]="data + '.' + group.value.id"
                                 (remove)="deleteGroupFromArray(subIndex)"
-                                [formControlName]="subIndex">
+                                [formControlName]="subIndex" id="list-one" cdkDropList>
               </app-action-group>
             </div>
           </div>

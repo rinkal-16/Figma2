@@ -1,20 +1,9 @@
-import {
-  Component,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewEncapsulation
-} from '@angular/core';
-import {ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, } from '@angular/forms';
-import {Subject} from 'rxjs';
+import { Component, EventEmitter, forwardRef, Inject, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import {Globals} from '../globals';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-
+import { Globals} from '../globals';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 export interface GroupControlComponentData {
   conjunctor: null;
@@ -65,6 +54,7 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
   // tslint:disable-next-line:no-output-rename
   @Output('parentId') parentId: any;
   @Output() public getUserData = new EventEmitter<string>();
+  @Output() onDataToParent = new EventEmitter<any>();
 
   private onChange: ((
     value: GroupControlComponentData | null | undefined
@@ -83,7 +73,7 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
       // @ts-ignore
       this.connectedTo.push(week.id);
       // @ts-ignore
-      console.log(this.connectedTo.push(week.id));
+      console.log('ngOnInit: ', this.connectedTo.push(week.id));
     }
   }
 
@@ -142,10 +132,10 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
     );
 
     this.getId = this._groupsFormArray.controls.map((i: any) => {
-      console.log(i.value.id);
       return i.value.id;
     });
-    console.log(this.getArrayDepth(this._groupsFormArray.controls));
+    console.log(this._groupsFormArray.controls);
+    
   }
   // tslint:disable-next-line:typedef
   getArrayDepth(ry: any) {
@@ -166,7 +156,6 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
     }
     return levels;
   }
-
 
   // tslint:disable-next-line:typedef
   private createFormGroup() {
@@ -191,6 +180,7 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
     // console.log('event: ', event);
     // console.log('drop last position', event.item._dragRef._pointerPositionAtLastDirectionChange);
     moveItemInArray(this._groupsFormArray.controls, event.previousIndex, event.currentIndex);
+    this.onDataToParent.emit(event);
     // if (event.previousContainer !== event.container) {
     //   console.log('if called');
     //   transferArrayItem(event.previousContainer.data,
@@ -200,5 +190,19 @@ export class ActionGroupComponent implements ControlValueAccessor, OnDestroy, On
     // }
   }
 
+  // drop(event: CdkDragDrop<string[]>) {
+  //   console.log('sub', event.previousContainer, event.container);
+  //   if (event.previousContainer !== event.container) {
+  //     alert('if');
+  //     moveItemInArray(this._groupsFormArray.controls, event.previousIndex, event.currentIndex);
+  //   } else {
+  //      alert('else');
+  //      console.log(event.previousContainer.data, this._groupsFormArray.controls, event.previousIndex, event.currentIndex);
+  //       transferArrayItem(event.previousContainer.data,
+  //         this._groupsFormArray.controls,
+  //       event.previousIndex,
+  //       event.currentIndex);
+  //   }
+  // }
 
 }

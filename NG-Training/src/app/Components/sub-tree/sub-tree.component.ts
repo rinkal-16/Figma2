@@ -11,6 +11,8 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 })
 
 export class SubTreeComponent implements OnInit {
+  groups: any;
+  id: any;
 
     constructor(private fb: FormBuilder, public globalId: Globals) {
       this.globalId.dataID = 1;
@@ -51,7 +53,7 @@ export class SubTreeComponent implements OnInit {
         // @ts-ignore
         this.connectedTo.push(week.id);
         // @ts-ignore
-        console.log(this.connectedTo.push(week.id));
+        console.log('ngOnInit: ', this.connectedTo.push(week.id));
       }
     }
     // tslint:disable-next-line:use-lifecycle-interface
@@ -97,19 +99,19 @@ export class SubTreeComponent implements OnInit {
         });
       }
       this.getId = this.groupsFormArray.controls.map((i: any) => {
-        // console.log(i.value.id);
+      
         return i.value.id;
       });
 
       this.totalData = this.formParent.value;
       // tslint:disable-next-line:prefer-for-of
       for (let k = 0; k < this.formParent.value.length; k++) {
-        console.log(this.totalData.main.groups[k].id);
+      
       }
 
     }
   // tslint:disable-next-line:typedef
-  getArrayDepth(ry: any){
+  getArrayDepth(ry: any) {
     // number of levels: how deep is the array
     let levels = 1;
     // previous length
@@ -145,17 +147,41 @@ export class SubTreeComponent implements OnInit {
     }
     // tslint:disable-next-line:typedef
     drop(event: CdkDragDrop<string[]>) {
+    
       // console.log('event: ', event);
       // console.log('distance: ', event.distance);
       // console.log('drop last position', event.item._dragRef._pointerPositionAtLastDirectionChange);
       moveItemInArray(this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
-      // if (event.previousContainer !== event.container) {
-      //   console.log('if called');
-      //   transferArrayItem(event.previousContainer.data,
+      // // console.log('main', event.previousContainer, event.container);
+      // if (event.previousContainer === event.container) {
+      //   alert('if');
+      //   moveItemInArray(this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
+      // } else {
+      //    alert('else');
+      //    console.log(event.previousContainer.data, this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
+      //     transferArrayItem(event.previousContainer.data,
       //     event.container.data,
       //     event.previousIndex,
       //     event.currentIndex);
       // }
+    
     }
+
+   dropped(event: CdkDragDrop<string[]>) {
+  
+     console.log('called....', event, event.previousIndex, event.currentIndex);
+     if (event.previousContainer === event.container) {
+      alert('if');
+      moveItemInArray(this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
+    } else {
+       alert('else');
+       console.log(event.previousContainer.data, this.groupsFormArray.controls, event.previousIndex, event.currentIndex);
+        transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+   }
+  
 
 }

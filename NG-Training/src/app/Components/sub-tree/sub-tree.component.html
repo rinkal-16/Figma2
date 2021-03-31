@@ -19,9 +19,11 @@
               <button type="button" class="btn btn-outline-primary"
                       (click)="_addGroup()">Add node</button>
             </section>
+          
             <ng-container formGroupName="main">
               <ng-container formArrayName="groups" cdkDropListGroup>
-                      <div cdkDropList (cdkDropListDropped)="drop($event)">
+                      <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="groupsFormArray"
+                      >
                         <div cdkDrag style="margin-bottom: 10px;" *ngFor="let group of groupsFormArray?.controls; index as i">
                           <div  class="example-custom-placeholder" *cdkDragPlaceholder></div>
                           <div id="accordion" class="custom-accordion">
@@ -42,8 +44,9 @@
                               <div>
                                 <app-action-group (remove)="delete(i)"
                                                   [formControlName]="i"
-                                                  [data]="group.value.id"
-                                                  [formLabel]="'Parent: ' + this.groupsFormArray.value[i].id">
+                                                  [data]="group.value.id"                                            
+                                                  [formLabel]="'Parent: ' + this.groupsFormArray.value[i].id"
+                                                  (onDataToParent)="dropped($event)">                  
                                 </app-action-group>
                               </div>
                             </div>
